@@ -18,6 +18,7 @@ export async function GET() {
         type: true,
         category: true,
         content: true,
+        generatedContent: true,
         status: true,
         createdAt: true,
       },

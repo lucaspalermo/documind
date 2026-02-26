@@ -104,7 +104,7 @@ export function Pricing() {
                       <>
                         <span className="text-sm text-surface-400">R$</span>
                         <span className="text-4xl font-extrabold text-surface-900 font-[family-name:var(--font-jakarta)]">
-                          {plan.price.toFixed(0).replace(".", ",")}
+                          {plan.price % 1 === 0 ? plan.price.toFixed(0) : plan.price.toFixed(2).replace(".", ",")}
                         </span>
                         <span className="text-surface-400 text-sm">/mês</span>
                       </>

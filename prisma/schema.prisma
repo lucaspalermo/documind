@@ -76,6 +76,7 @@ model User {
   // Asaas
   asaasCustomerId    String? @unique
   asaasSubscriptionId String?
+  cpf                String?
 
   // Usage tracking
   documentsUsed    Int       @default(0)
@@ -100,13 +101,14 @@ enum DocStatus {
 }
 
 model Document {
-  id       String    @id @default(cuid())
-  title    String
-  type     String    // slug do template (ex: "contrato-de-aluguel-residencial")
-  category String    // "imobiliario", "comercial", "trabalhista", "pessoal"
-  content  Json      // campos preenchidos do documento
-  pdfUrl   String?
-  status   DocStatus @default(DRAFT)
+  id               String    @id @default(cuid())
+  title            String
+  type             String    // slug do template (ex: "contrato-de-aluguel-residencial")
+  category         String    // "imobiliario", "comercial", "trabalhista", "pessoal"
+  content          Json      // campos preenchidos do documento
+  generatedContent String?   @db.Text // texto gerado pela IA
+  pdfUrl           String?
+  status           DocStatus @default(DRAFT)
 
   userId String
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)

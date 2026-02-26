@@ -1,22 +1,27 @@
-const ASAAS_BASE_URL = process.env.NEXT_PUBLIC_ASAAS_ENVIRONMENT === "production"
+const ASAAS_BASE_URL = process.env.ASAAS_ENVIRONMENT === "production"
   ? "https://api.asaas.com/v3"
   : "https://sandbox.asaas.com/api/v3";
 
 const ASAAS_API_KEY = process.env.ASAAS_API_KEY;
 
 async function asaasRequest(path: string, options: RequestInit = {}) {
+  if (!ASAAS_API_KEY) {
+    throw new Error("ASAAS_API_KEY is not configured");
+  }
+
   const res = await fetch(`${ASAAS_BASE_URL}${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
-      access_token: ASAAS_API_KEY || "",
+      access_token: ASAAS_API_KEY,
       ...options.headers,
     },
   });
 
   if (!res.ok) {
-    const error = await res.json().catch(() => ({}));
-    throw new Error(error.description || `Asaas error: ${res.status}`);
+    const errorData = await res.json().catch(() => ({}));
+    const message = errorData?.errors?.[0]?.description || errorData?.description || `Asaas error: ${res.status}`;
+    throw new Error(message);
   }
 
   return res.json();
@@ -25,7 +30,7 @@ async function asaasRequest(path: string, options: RequestInit = {}) {
 export async function createCustomer(data: {
   name: string;
   email: string;
-  cpfCnpj?: string;
+  cpfCnpj: string;
 }) {
   return asaasRequest("/customers", {
     method: "POST",
@@ -40,6 +45,7 @@ export async function createSubscription(data: {
   cycle: "MONTHLY";
   description: string;
   nextDueDate: string;
+  externalReference?: string;
 }) {
   return asaasRequest("/subscriptions", {
     method: "POST",
@@ -51,22 +57,16 @@ export async function getSubscription(subscriptionId: string) {
   return asaasRequest(`/subscriptions/${subscriptionId}`);
 }
 
+export async function getSubscriptionPayments(subscriptionId: string) {
+  return asaasRequest(`/subscriptions/${subscriptionId}/payments`);
+}
+
+export async function getPaymentPixQrCode(paymentId: string) {
+  return asaasRequest(`/payments/${paymentId}/pixQrCode`);
+}
+
 export async function cancelSubscription(subscriptionId: string) {
   return asaasRequest(`/subscriptions/${subscriptionId}`, {
     method: "DELETE",
-  });
-}
-
-export async function createPaymentLink(data: {
-  name: string;
-  description: string;
-  value: number;
-  billingType: "UNDEFINED";
-  chargeType: "RECURRENT";
-  subscriptionCycle: "MONTHLY";
-}) {
-  return asaasRequest("/paymentLinks", {
-    method: "POST",
-    body: JSON.stringify(data),
   });
 }

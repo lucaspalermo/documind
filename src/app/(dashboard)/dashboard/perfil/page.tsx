@@ -60,9 +60,9 @@ export default function PerfilPage() {
           <div className="flex items-center gap-3">
             <Shield className="w-5 h-5 text-surface-400" />
             <div>
-              <p className="text-xs text-surface-400">Conta criada em</p>
+              <p className="text-xs text-surface-400">Plano atual</p>
               <p className="text-sm font-medium text-surface-900">
-                {new Date().toLocaleDateString("pt-BR")}
+                {(user as any)?.plan || "FREE"}
               </p>
             </div>
           </div>

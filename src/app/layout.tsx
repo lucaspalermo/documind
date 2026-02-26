@@ -80,7 +80,6 @@ const jsonLd = {
       url: SITE_URL,
       description: SITE_DESCRIPTION,
       email: "contato@documind.com.br",
-      sameAs: [],
     },
     {
       "@type": "WebSite",
@@ -109,12 +108,6 @@ const jsonLd = {
         highPrice: "297",
         priceCurrency: "BRL",
         offerCount: 4,
-      },
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.9",
-        ratingCount: "847",
-        bestRating: "5",
       },
     },
   ],

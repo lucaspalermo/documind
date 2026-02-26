@@ -153,10 +153,9 @@ export default function GerarDocumentoPage() {
               Documento gerado com sucesso!
             </span>
           </div>
-          <div
-            className="prose prose-slate max-w-none"
-            dangerouslySetInnerHTML={{ __html: generatedContent.replace(/\n/g, "<br />") }}
-          />
+          <div className="prose prose-slate max-w-none whitespace-pre-wrap text-surface-800 leading-relaxed">
+            {generatedContent}
+          </div>
         </div>
       </div>
     );

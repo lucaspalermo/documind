@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { generateDocument } from "@/lib/ai";
+import { getTemplateBySlug } from "@/data/templates";
 
 export async function POST(req: Request) {
   try {
@@ -10,10 +11,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
     }
 
-    const { templateSlug, templateTitle, formData } = await req.json();
+    const { templateSlug, formData } = await req.json();
 
     if (!templateSlug || !formData) {
       return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
+    }
+
+    // Look up template server-side (don't trust client-provided title)
+    const template = getTemplateBySlug(templateSlug);
+    if (!template) {
+      return NextResponse.json({ error: "Modelo não encontrado" }, { status: 404 });
     }
 
     // Check usage limits for FREE users
@@ -24,6 +31,14 @@ export async function POST(req: Request) {
 
     if (!user) {
       return NextResponse.json({ error: "Usuário não encontrado" }, { status: 404 });
+    }
+
+    // Check premium template access
+    if (template.isPremium && user.plan === "FREE") {
+      return NextResponse.json(
+        { error: "Este modelo é exclusivo para assinantes. Faça upgrade para o plano Pro." },
+        { status: 403 }
+      );
     }
 
     // Reset monthly counter if needed
@@ -40,27 +55,22 @@ export async function POST(req: Request) {
     // Check limits for FREE plan
     if (user.plan === "FREE" && user.documentsUsed >= 3) {
       return NextResponse.json(
-        { error: "Limite de documentos atingido. Faça upgrade para o plano PRO para documentos ilimitados." },
+        { error: "Limite de documentos atingido. Faça upgrade para o plano Pro para documentos ilimitados." },
         { status: 403 }
       );
     }
 
     // Generate document with AI
-    const content = await generateDocument(templateTitle, formData);
+    const content = await generateDocument(template.title, formData);
 
-    // Save to database
+    // Save to database with generated content
     const document = await prisma.document.create({
       data: {
-        title: templateTitle,
+        title: template.title,
         type: templateSlug,
-        category: templateSlug.includes("aluguel") || templateSlug.includes("imovel") || templateSlug.includes("vistoria") || templateSlug.includes("distrato-de-locacao")
-          ? "imobiliario"
-          : templateSlug.includes("servico") || templateSlug.includes("freelancer") || templateSlug.includes("parceria") || templateSlug.includes("nda") || templateSlug.includes("orcamento")
-          ? "comercial"
-          : templateSlug.includes("clt") || templateSlug.includes("estagio") || templateSlug.includes("rescisao") || templateSlug.includes("home-office")
-          ? "trabalhista"
-          : "pessoal",
+        category: template.category,
         content: formData,
+        generatedContent: content,
         status: "COMPLETED",
         userId: session.user.id,
       },

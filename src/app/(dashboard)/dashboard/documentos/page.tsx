@@ -11,6 +11,7 @@ interface Document {
   type: string;
   category: string;
   content: Record<string, string>;
+  generatedContent: string | null;
   status: string;
   createdAt: string;
 }
@@ -48,16 +49,21 @@ export default function DocumentosPage() {
   async function handleDownload(doc: Document) {
     setDownloadingId(doc.id);
     try {
+      // Use AI-generated content if available, fallback to form data
+      const pdfContent = doc.generatedContent
+        ? doc.generatedContent
+        : typeof doc.content === "string"
+          ? doc.content
+          : Object.entries(doc.content)
+              .map(([key, value]) => `${key.replace(/_/g, " ")}: ${value}`)
+              .join("\n");
+
       const res = await fetch("/api/pdf", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title: doc.title,
-          content: typeof doc.content === "string"
-            ? doc.content
-            : Object.entries(doc.content)
-                .map(([key, value]) => `${key.replace(/_/g, " ")}: ${value}`)
-                .join("\n"),
+          content: pdfContent,
         }),
       });
 

@@ -26,10 +26,10 @@ export function Hero() {
             <div className="inline-flex items-center gap-2 animate-fade-in">
               <Badge variant="primary" size="md">
                 <Sparkles className="w-3.5 h-3.5 mr-1 text-primary-500" />
-                Inteligencia Artificial
+                Inteligência Artificial
               </Badge>
               <Badge variant="cta" size="md">
-                3 docs gratis
+                3 docs grátis
               </Badge>
             </div>
 
@@ -45,7 +45,7 @@ export function Hero() {
             {/* Subheadline */}
             <p className="mt-6 text-lg text-surface-500 animate-slide-up delay-100 leading-relaxed">
               Escolha entre 20+ modelos, personalize com IA e baixe em PDF.
-              <span className="block mt-1 text-surface-400">Sem advogado. Sem complicacao. Sem custo escondido.</span>
+              <span className="block mt-1 text-surface-400">Sem advogado. Sem complicação. Sem custo escondido.</span>
             </p>
 
             {/* Search bar */}
@@ -68,10 +68,10 @@ export function Hero() {
                 </div>
               </div>
               <p className="mt-3 text-sm text-surface-400">
-                Popular: <button className="text-primary-600 hover:underline cursor-pointer">Contrato de Aluguel</button>{" · "}
-                <button className="text-primary-600 hover:underline cursor-pointer">Prestacao de Servico</button>{" · "}
-                <button className="text-primary-600 hover:underline cursor-pointer">Recibo</button>{" · "}
-                <button className="text-primary-600 hover:underline cursor-pointer">Procuracao</button>
+                Popular: <a href="/modelos/contrato-de-aluguel-residencial" className="text-primary-600 hover:underline">Contrato de Aluguel</a>{" · "}
+                <a href="/modelos/contrato-de-prestacao-de-servico" className="text-primary-600 hover:underline">Prestação de Serviço</a>{" · "}
+                <a href="/modelos/recibo-de-pagamento" className="text-primary-600 hover:underline">Recibo</a>{" · "}
+                <a href="/modelos/procuracao-simples" className="text-primary-600 hover:underline">Procuração</a>
               </p>
             </div>
 
@@ -79,11 +79,11 @@ export function Hero() {
             <div className="mt-8 flex flex-wrap items-center gap-4 animate-slide-up delay-300">
               <div className="flex items-center gap-1.5 text-sm text-surface-500">
                 <FileCheck className="w-4 h-4 text-cta-500" />
-                <span>3 documentos gratis</span>
+                <span>3 documentos grátis</span>
               </div>
               <div className="flex items-center gap-1.5 text-sm text-surface-500">
                 <Shield className="w-4 h-4 text-cta-500" />
-                <span>LGPD compliant</span>
+                <span>Conforme LGPD</span>
               </div>
               <div className="flex items-center gap-1.5 text-sm text-surface-500">
                 <Zap className="w-4 h-4 text-cta-500" />
@@ -134,9 +134,9 @@ export function Hero() {
 
                 {/* Clause highlight */}
                 <div className="p-4 rounded-xl bg-primary-50 border border-primary-100 mb-6">
-                  <p className="text-xs font-semibold text-primary-700 mb-1">CLAUSULA III — DO VALOR</p>
+                  <p className="text-xs font-semibold text-primary-700 mb-1">CLÁUSULA III — DO VALOR</p>
                   <p className="text-xs text-primary-600/80 leading-relaxed">
-                    O valor mensal do aluguel e de <span className="font-bold text-primary-700">R$ 2.500,00</span> (dois mil e quinhentos reais), a ser pago ate o dia <span className="font-bold text-primary-700">05</span> de cada mes...
+                    O valor mensal do aluguel é de <span className="font-bold text-primary-700">R$ 2.500,00</span> (dois mil e quinhentos reais), a ser pago até o dia <span className="font-bold text-primary-700">05</span> de cada mês...
                   </p>
                 </div>
 
@@ -151,7 +151,7 @@ export function Hero() {
                   <div className="flex-1 border-t-2 border-dashed border-surface-300 pt-2">
                     <div className="flex items-center gap-1">
                       <Pen className="w-3 h-3 text-surface-400" />
-                      <span className="text-[10px] text-surface-400">Locatario</span>
+                      <span className="text-[10px] text-surface-400">Locatário</span>
                     </div>
                   </div>
                 </div>
@@ -173,7 +173,7 @@ export function Hero() {
                   </div>
                   <div>
                     <p className="text-[10px] font-bold text-surface-900">IA Personalizou</p>
-                    <p className="text-[10px] text-surface-400">12 clausulas</p>
+                    <p className="text-[10px] text-surface-400">12 cláusulas</p>
                   </div>
                 </div>
               </div>
