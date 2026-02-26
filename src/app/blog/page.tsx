@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CTASection } from "@/components/marketing/cta-section";
-import { SITE_NAME } from "@/lib/utils";
+import { SITE_NAME, SITE_URL } from "@/lib/utils";
 import { FileText, Clock, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     "direito imobiliário",
     "contrato de aluguel dicas",
   ],
+  alternates: {
+    canonical: `${SITE_URL}/blog`,
+  },
 };
 
 const posts = [
@@ -72,6 +75,60 @@ const posts = [
     category: "Pessoal",
     readTime: "3 min",
     date: "21 Fev 2026",
+  },
+  {
+    slug: "distrato-de-aluguel-como-fazer",
+    title: "Distrato de aluguel: como fazer a rescisão corretamente",
+    excerpt:
+      "Saiba como encerrar um contrato de aluguel de forma legal, com modelo de distrato e cálculo de multa proporcional.",
+    category: "Imobiliário",
+    readTime: "5 min",
+    date: "20 Fev 2026",
+  },
+  {
+    slug: "contrato-compra-venda-imovel",
+    title: "Contrato de compra e venda de imóvel: guia completo",
+    excerpt:
+      "Tudo que você precisa saber sobre o contrato de compra e venda de imóvel, cláusulas essenciais e cuidados na negociação.",
+    category: "Imobiliário",
+    readTime: "7 min",
+    date: "19 Fev 2026",
+  },
+  {
+    slug: "termo-confidencialidade-nda",
+    title: "Termo de confidencialidade (NDA): quando e como usar",
+    excerpt:
+      "Entenda o que é um NDA, quando ele é obrigatório e quais cláusulas incluir para proteger informações sigilosas.",
+    category: "Comercial",
+    readTime: "4 min",
+    date: "18 Fev 2026",
+  },
+  {
+    slug: "contrato-trabalho-clt",
+    title: "Contrato de trabalho CLT: o que a empresa deve incluir",
+    excerpt:
+      "Guia sobre as cláusulas obrigatórias do contrato de trabalho pela CLT e os direitos do empregado.",
+    category: "Trabalhista",
+    readTime: "5 min",
+    date: "17 Fev 2026",
+  },
+  {
+    slug: "declaracao-de-residencia-modelo",
+    title: "Declaração de residência: modelo e como fazer",
+    excerpt:
+      "Aprenda a criar uma declaração de residência válida, quando ela é aceita e quais dados são obrigatórios.",
+    category: "Pessoal",
+    readTime: "3 min",
+    date: "16 Fev 2026",
+  },
+  {
+    slug: "contrato-emprestimo-entre-pessoas",
+    title: "Contrato de empréstimo entre pessoas físicas: como fazer",
+    excerpt:
+      "Saiba como formalizar um empréstimo entre amigos ou familiares com contrato válido e evitar problemas.",
+    category: "Pessoal",
+    readTime: "4 min",
+    date: "15 Fev 2026",
   },
 ];
 

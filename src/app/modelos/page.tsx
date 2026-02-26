@@ -5,6 +5,8 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { TemplateGrid } from "@/components/modelos/template-grid";
 
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
   title: "Modelos de Contratos e Documentos",
   description:
@@ -17,6 +19,9 @@ export const metadata: Metadata = {
     "procuração",
     "recibo",
   ],
+  alternates: {
+    canonical: `${SITE_URL}/modelos`,
+  },
 };
 
 export default function ModelosPage() {

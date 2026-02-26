@@ -6,6 +6,9 @@ import { SITE_NAME, SITE_URL } from "@/lib/utils";
 export const metadata: Metadata = {
   title: `Termos de Uso | ${SITE_NAME}`,
   description: `Termos de Uso da plataforma ${SITE_NAME}. Leia nossos termos antes de utilizar nossos serviços.`,
+  alternates: {
+    canonical: `${SITE_URL}/termos`,
+  },
 };
 
 export default function TermosPage() {

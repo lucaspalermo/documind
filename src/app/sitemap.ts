@@ -56,6 +56,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "direitos-inquilino-aluguel",
     "contrato-freelancer-autonomo",
     "recibo-pagamento-modelo",
+    "distrato-de-aluguel-como-fazer",
+    "contrato-compra-venda-imovel",
+    "termo-confidencialidade-nda",
+    "contrato-trabalho-clt",
+    "declaracao-de-residencia-modelo",
+    "contrato-emprestimo-entre-pessoas",
   ];
 
   const blogPages: MetadataRoute.Sitemap = blogPosts.map((slug) => ({

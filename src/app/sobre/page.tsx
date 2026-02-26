@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { SITE_NAME } from "@/lib/utils";
+import { SITE_NAME, SITE_URL } from "@/lib/utils";
 import { FileText, Sparkles, Shield, Users, Target, Zap } from "lucide-react";
 
 export const metadata: Metadata = {
   title: `Sobre Nós | ${SITE_NAME}`,
   description:
     "Conheça o Documind — a plataforma brasileira que usa inteligência artificial para gerar contratos e documentos profissionais em segundos.",
+  alternates: {
+    canonical: `${SITE_URL}/sobre`,
+  },
 };
 
 const values = [

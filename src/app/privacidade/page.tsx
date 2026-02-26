@@ -6,6 +6,9 @@ import { SITE_NAME, SITE_URL } from "@/lib/utils";
 export const metadata: Metadata = {
   title: `Política de Privacidade | ${SITE_NAME}`,
   description: `Política de Privacidade do ${SITE_NAME}. Saiba como coletamos, usamos e protegemos seus dados pessoais.`,
+  alternates: {
+    canonical: `${SITE_URL}/privacidade`,
+  },
 };
 
 export default function PrivacidadePage() {
