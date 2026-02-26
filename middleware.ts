@@ -10,18 +10,24 @@ export async function middleware(req: NextRequest) {
 
   const isAuthPage = pathname.startsWith("/login") || pathname.startsWith("/registro");
   const isDashboard = pathname.startsWith("/dashboard");
+  const isAdmin = pathname.startsWith("/admin");
 
   if (isLoggedIn && isAuthPage) {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
-  if (!isLoggedIn && isDashboard) {
+  if (!isLoggedIn && (isDashboard || isAdmin)) {
     return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  // Admin page: check role in JWT token
+  if (isAdmin && token?.role !== "ADMIN") {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/registro"],
+  matcher: ["/dashboard/:path*", "/admin/:path*", "/login", "/registro"],
 };

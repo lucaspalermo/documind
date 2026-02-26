@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FileText, Download, Trash2, Clock, Check, Edit3, FilePlus } from "lucide-react";
+import { FileText, Download, Trash2, Clock, Check, Edit3, FilePlus, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -10,6 +10,7 @@ interface Document {
   title: string;
   type: string;
   category: string;
+  content: Record<string, string>;
   status: string;
   createdAt: string;
 }
@@ -23,23 +24,75 @@ const statusConfig: Record<string, { label: string; variant: "default" | "primar
 export default function DocumentosPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchDocs() {
-      try {
-        const res = await fetch("/api/documentos");
-        if (res.ok) {
-          const data = await res.json();
-          setDocuments(data);
-        }
-      } catch {
-        // Will be empty on first load
-      } finally {
-        setLoading(false);
-      }
-    }
     fetchDocs();
   }, []);
+
+  async function fetchDocs() {
+    try {
+      const res = await fetch("/api/documentos");
+      if (res.ok) {
+        const data = await res.json();
+        setDocuments(data);
+      }
+    } catch {
+      // Will be empty on first load
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleDownload(doc: Document) {
+    setDownloadingId(doc.id);
+    try {
+      const res = await fetch("/api/pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: doc.title,
+          content: typeof doc.content === "string"
+            ? doc.content
+            : Object.entries(doc.content)
+                .map(([key, value]) => `${key.replace(/_/g, " ")}: ${value}`)
+                .join("\n"),
+        }),
+      });
+
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${doc.type || "documento"}.pdf`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    } catch {
+      alert("Erro ao baixar PDF. Tente novamente.");
+    } finally {
+      setDownloadingId(null);
+    }
+  }
+
+  async function handleDelete(id: string) {
+    if (!confirm("Tem certeza que deseja excluir este documento?")) return;
+    setDeletingId(id);
+    try {
+      const res = await fetch(`/api/documentos?id=${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setDocuments((prev) => prev.filter((d) => d.id !== id));
+      } else {
+        alert("Erro ao excluir documento.");
+      }
+    } catch {
+      alert("Erro ao excluir documento.");
+    } finally {
+      setDeletingId(null);
+    }
+  }
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -95,11 +148,29 @@ export default function DocumentosPage() {
                   {status.label}
                 </Badge>
                 <div className="flex gap-1">
-                  <button className="p-2 rounded-lg hover:bg-surface-100 transition-colors cursor-pointer">
-                    <Download className="w-4 h-4 text-surface-400" />
+                  <button
+                    onClick={() => handleDownload(doc)}
+                    disabled={downloadingId === doc.id}
+                    className="p-2 rounded-lg hover:bg-surface-100 transition-colors cursor-pointer disabled:opacity-50"
+                    title="Baixar PDF"
+                  >
+                    {downloadingId === doc.id ? (
+                      <Loader2 className="w-4 h-4 text-primary-600 animate-spin" />
+                    ) : (
+                      <Download className="w-4 h-4 text-surface-400" />
+                    )}
                   </button>
-                  <button className="p-2 rounded-lg hover:bg-red-50 transition-colors cursor-pointer">
-                    <Trash2 className="w-4 h-4 text-surface-400 hover:text-red-500" />
+                  <button
+                    onClick={() => handleDelete(doc.id)}
+                    disabled={deletingId === doc.id}
+                    className="p-2 rounded-lg hover:bg-red-50 transition-colors cursor-pointer disabled:opacity-50"
+                    title="Excluir documento"
+                  >
+                    {deletingId === doc.id ? (
+                      <Loader2 className="w-4 h-4 text-red-500 animate-spin" />
+                    ) : (
+                      <Trash2 className="w-4 h-4 text-surface-400 hover:text-red-500" />
+                    )}
                   </button>
                 </div>
               </div>

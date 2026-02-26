@@ -12,8 +12,9 @@ import {
   LogOut,
   X,
   Menu,
+  Shield,
 } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -27,6 +28,8 @@ const NAV_ITEMS = [
 export function DashboardSidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { data: session } = useSession();
+  const isAdmin = (session?.user as any)?.role === "ADMIN";
 
   const navContent = (
     <nav className="flex flex-col h-full">
@@ -63,6 +66,24 @@ export function DashboardSidebar() {
           );
         })}
       </div>
+
+      {/* Admin link */}
+      {isAdmin && (
+        <div className="px-4 pb-1">
+          <a
+            href="/admin"
+            className={cn(
+              "flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all",
+              pathname.startsWith("/admin")
+                ? "bg-red-50 text-red-700 border border-red-200"
+                : "text-red-600 hover:bg-red-50"
+            )}
+          >
+            <Shield className="w-5 h-5" />
+            Admin
+          </a>
+        </div>
+      )}
 
       {/* Logout */}
       <div className="p-4 border-t border-surface-200/60">

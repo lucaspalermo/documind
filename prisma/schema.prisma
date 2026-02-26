@@ -58,6 +58,11 @@ enum Plan {
   ENTERPRISE
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -65,6 +70,7 @@ model User {
   emailVerified DateTime?
   password      String?
   image         String?
+  role          Role      @default(USER)
   plan          Plan      @default(FREE)
 
   // Asaas
