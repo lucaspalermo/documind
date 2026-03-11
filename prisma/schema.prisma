@@ -5,6 +5,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["documind"]
 }
 
 // ════════════════════════════════════════════════════
@@ -28,6 +29,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@schema("documind")
 }
 
 model Session {
@@ -37,6 +39,8 @@ model Session {
   expires      DateTime
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@schema("documind")
 }
 
 model VerificationToken {
@@ -45,6 +49,7 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+  @@schema("documind")
 }
 
 // ════════════════════════════════════════════════════
@@ -56,11 +61,15 @@ enum Plan {
   PRO
   BUSINESS
   ENTERPRISE
+
+  @@schema("documind")
 }
 
 enum Role {
   USER
   ADMIN
+
+  @@schema("documind")
 }
 
 model User {
@@ -88,6 +97,8 @@ model User {
   accounts  Account[]
   sessions  Session[]
   documents Document[]
+
+  @@schema("documind")
 }
 
 // ════════════════════════════════════════════════════
@@ -98,6 +109,8 @@ enum DocStatus {
   DRAFT
   COMPLETED
   SIGNED
+
+  @@schema("documind")
 }
 
 model Document {
@@ -118,6 +131,7 @@ model Document {
 
   @@index([userId])
   @@index([type])
+  @@schema("documind")
 }
 
 // ════════════════════════════════════════════════════
@@ -128,4 +142,6 @@ model NewsletterSubscriber {
   id        String   @id @default(cuid())
   email     String   @unique
   createdAt DateTime @default(now())
+
+  @@schema("documind")
 }

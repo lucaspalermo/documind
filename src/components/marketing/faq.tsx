@@ -13,7 +13,7 @@ const FAQ_ITEMS = [
   {
     question: "Quantos documentos posso gerar gratuitamente?",
     answer:
-      "No plano gratuito, você pode gerar até 3 documentos por mês. Isso inclui contratos, recibos, procurações e qualquer outro modelo disponível na plataforma.",
+      "No plano gratuito, você pode gerar 1 documento por mês. Isso inclui contratos, recibos, procurações e qualquer outro modelo disponível na plataforma. Para documentos ilimitados, conheça o plano PRO.",
   },
   {
     question: "Como a inteligência artificial personaliza o documento?",
@@ -47,11 +47,28 @@ const FAQ_ITEMS = [
   },
 ];
 
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answer,
+    },
+  })),
+};
+
 export function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
     <section className="py-24 bg-section-alt relative">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">

@@ -22,10 +22,10 @@ export function Footer() {
               Gere contratos e documentos profissionais em segundos com inteligência artificial.
             </p>
             <div className="flex gap-3">
-              <a href="#" className="w-9 h-9 rounded-lg bg-surface-800 hover:bg-surface-700 flex items-center justify-center transition-colors" aria-label="Instagram">
+              <a href="https://www.instagram.com/documind.br" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-surface-800 hover:bg-surface-700 flex items-center justify-center transition-colors" aria-label="Instagram">
                 <Instagram className="w-4 h-4" />
               </a>
-              <a href="#" className="w-9 h-9 rounded-lg bg-surface-800 hover:bg-surface-700 flex items-center justify-center transition-colors" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/company/documind" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-surface-800 hover:bg-surface-700 flex items-center justify-center transition-colors" aria-label="LinkedIn">
                 <Linkedin className="w-4 h-4" />
               </a>
               <a href="mailto:contato@documind.com.br" className="w-9 h-9 rounded-lg bg-surface-800 hover:bg-surface-700 flex items-center justify-center transition-colors" aria-label="Email">
@@ -40,7 +40,7 @@ export function Footer() {
             <ul className="space-y-2.5">
               {TEMPLATE_CATEGORIES.map((cat) => (
                 <li key={cat.slug}>
-                  <Link href={`/modelos?categoria=${cat.slug}`} className="text-sm hover:text-white transition-colors">
+                  <Link href={`/modelos/categoria/${cat.slug}`} className="text-sm hover:text-white transition-colors">
                     {cat.name}
                   </Link>
                 </li>
@@ -60,6 +60,8 @@ export function Footer() {
               <li><Link href="/precos" className="text-sm hover:text-white transition-colors">Preços</Link></li>
               <li><Link href="/modelos" className="text-sm hover:text-white transition-colors">Biblioteca de Modelos</Link></li>
               <li><Link href="/blog" className="text-sm hover:text-white transition-colors">Blog</Link></li>
+              <li><Link href="/comparar/documind-vs-advogado" className="text-sm hover:text-white transition-colors">Documind vs Advogado</Link></li>
+              <li><Link href="/comparar/documind-vs-word" className="text-sm hover:text-white transition-colors">Documind vs Word</Link></li>
               <li><Link href="/registro" className="text-sm hover:text-white transition-colors">Criar Conta</Link></li>
             </ul>
           </div>

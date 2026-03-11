@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import jsPDF from "jspdf";
 
 // Sanitize filename for Content-Disposition header
@@ -29,6 +30,38 @@ function transliterate(text: string): string {
   return text.replace(/[^\x00-\x7F]/g, (char) => map[char] || char);
 }
 
+function addWatermark(doc: jsPDF) {
+  const totalPages = doc.getNumberOfPages();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+
+    // Diagonal watermark text
+    doc.saveGraphicsState();
+    doc.setFontSize(50);
+    doc.setTextColor(200, 200, 200);
+    doc.setFont("helvetica", "bold");
+
+    // Center of page, rotated 45 degrees
+    const centerX = pageWidth / 2;
+    const centerY = pageHeight / 2;
+
+    doc.text("VERSAO GRATUITA", centerX, centerY - 20, {
+      align: "center",
+      angle: 45,
+    });
+    doc.setFontSize(18);
+    doc.text("Upgrade em documind.com.br", centerX, centerY + 10, {
+      align: "center",
+      angle: 45,
+    });
+
+    doc.restoreGraphicsState();
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const session = await auth();
@@ -41,6 +74,13 @@ export async function POST(req: Request) {
     if (!title || !content) {
       return NextResponse.json({ error: "Dados invalidos" }, { status: 400 });
     }
+
+    // Check user plan for watermark
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { plan: true },
+    });
+    const isFree = !user || user.plan === "FREE";
 
     // Generate PDF
     const doc = new jsPDF({
@@ -98,6 +138,11 @@ export async function POST(req: Request) {
         { align: "center" }
       );
       doc.setTextColor(0, 0, 0);
+    }
+
+    // Add watermark for FREE plan users
+    if (isFree) {
+      addWatermark(doc);
     }
 
     const pdfBuffer = doc.output("arraybuffer");

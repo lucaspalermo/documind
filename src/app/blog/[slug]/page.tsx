@@ -16,6 +16,10 @@ interface BlogPost {
   date: string;
   dateISO: string;
   content: string;
+  relatedTemplate?: {
+    slug: string;
+    label: string;
+  };
 }
 
 const blogPosts: BlogPost[] = [
@@ -28,6 +32,7 @@ const blogPosts: BlogPost[] = [
     readTime: "5 min",
     date: "26 de fevereiro de 2026",
     dateISO: "2026-02-26",
+    relatedTemplate: { slug: "contrato-de-aluguel-residencial", label: "Gerar contrato de aluguel" },
     content: `O contrato de aluguel é um dos documentos mais importantes para quem vai alugar ou disponibilizar um imóvel. Um bom contrato protege tanto o locador (proprietário) quanto o locatário (inquilino) e evita conflitos futuros.
 
 ## O que não pode faltar no contrato de aluguel
@@ -66,6 +71,7 @@ Com o Documind, você gera um contrato de aluguel completo em menos de 2 minutos
     readTime: "4 min",
     date: "25 de fevereiro de 2026",
     dateISO: "2026-02-25",
+    relatedTemplate: { slug: "contrato-de-prestacao-de-servico", label: "Gerar contrato de prestação de serviço" },
     content: `O contrato de prestação de serviço é essencial para formalizar qualquer relação de trabalho entre um prestador de serviço e um contratante. Sem ele, ambas as partes ficam desprotegidas em caso de conflitos.
 
 ## Cláusulas essenciais
@@ -104,6 +110,7 @@ No Documind, você preenche os dados do serviço e nossa IA gera um contrato com
     readTime: "3 min",
     date: "24 de fevereiro de 2026",
     dateISO: "2026-02-24",
+    relatedTemplate: { slug: "procuracao-simples", label: "Gerar procuração simples" },
     content: `A procuração é um documento pelo qual uma pessoa (outorgante) concede poderes a outra (outorgado) para agir em seu nome. A procuração simples, também chamada de particular, não precisa ser feita em cartório na maioria dos casos.
 
 ## Quando usar uma procuração simples
@@ -144,6 +151,7 @@ Use o Documind para gerar sua procuração simples com todos os campos necessár
     readTime: "6 min",
     date: "23 de fevereiro de 2026",
     dateISO: "2026-02-23",
+    relatedTemplate: { slug: "contrato-de-aluguel-residencial", label: "Gerar contrato de aluguel" },
     content: `A Lei do Inquilinato (Lei 8.245/91) é o principal instrumento legal que rege as relações de locação no Brasil. Conhecer seus direitos é fundamental para evitar abusos.
 
 ## Principais direitos do inquilino
@@ -179,6 +187,7 @@ Um contrato de aluguel bem elaborado é a melhor proteção. No Documind, você 
     readTime: "4 min",
     date: "22 de fevereiro de 2026",
     dateISO: "2026-02-22",
+    relatedTemplate: { slug: "contrato-de-freelancer", label: "Gerar contrato de freelancer" },
     content: `Trabalhar como freelancer oferece liberdade, mas também traz riscos. Sem um contrato, você fica exposto a calotes, mudanças de escopo e disputas sobre entregas.
 
 ## Por que todo freelancer precisa de contrato
@@ -219,6 +228,7 @@ Com o Documind, você cria um contrato de freelancer profissional em minutos. Pr
     readTime: "3 min",
     date: "21 de fevereiro de 2026",
     dateISO: "2026-02-21",
+    relatedTemplate: { slug: "recibo-de-pagamento", label: "Gerar recibo de pagamento" },
     content: `O recibo de pagamento é um documento que comprova a transferência de valores entre duas partes. Ele é fundamental para controle financeiro e pode ser usado como prova em disputas.
 
 ## Quando emitir um recibo
@@ -262,6 +272,7 @@ No Documind, você gera recibos de pagamento formatados profissionalmente em seg
     readTime: "5 min",
     date: "20 de fevereiro de 2026",
     dateISO: "2026-02-20",
+    relatedTemplate: { slug: "distrato-de-locacao", label: "Gerar distrato de locação" },
     content: `O distrato de aluguel é o documento que formaliza o encerramento de um contrato de locação. Ele é essencial para garantir que ambas as partes — locador e locatário — estejam de acordo com os termos da rescisão.
 
 ## Quando fazer um distrato de aluguel
@@ -311,6 +322,7 @@ No Documind, você cria o distrato de aluguel com todos os campos necessários e
     readTime: "7 min",
     date: "19 de fevereiro de 2026",
     dateISO: "2026-02-19",
+    relatedTemplate: { slug: "contrato-de-compra-e-venda-de-imovel", label: "Gerar contrato de compra e venda" },
     content: `O contrato de compra e venda de imóvel é um dos documentos mais importantes na vida de qualquer pessoa. Ele formaliza a transação e protege tanto o comprador quanto o vendedor contra fraudes e problemas futuros.
 
 ## Tipos de contrato imobiliário
@@ -371,6 +383,7 @@ Com o Documind, você gera contratos de compra e venda com todas as cláusulas d
     readTime: "4 min",
     date: "18 de fevereiro de 2026",
     dateISO: "2026-02-18",
+    relatedTemplate: { slug: "termo-de-confidencialidade-nda", label: "Gerar termo de confidencialidade" },
     content: `O Termo de Confidencialidade, também conhecido como NDA (Non-Disclosure Agreement), é um contrato que protege informações sigilosas compartilhadas entre partes em uma relação comercial ou profissional.
 
 ## Quando usar um NDA
@@ -422,6 +435,7 @@ Crie termos de confidencialidade profissionais em minutos com o Documind. Preenc
     readTime: "5 min",
     date: "17 de fevereiro de 2026",
     dateISO: "2026-02-17",
+    relatedTemplate: { slug: "contrato-de-trabalho-clt", label: "Gerar contrato CLT" },
     content: `O contrato de trabalho é o documento que formaliza a relação entre empregador e empregado conforme a Consolidação das Leis do Trabalho (CLT). Mesmo quando não é escrito, o vínculo empregatício pode ser reconhecido pela Justiça.
 
 ## Tipos de contrato de trabalho
@@ -477,6 +491,7 @@ O Documind gera contratos de trabalho CLT completos, com todas as cláusulas exi
     readTime: "3 min",
     date: "16 de fevereiro de 2026",
     dateISO: "2026-02-16",
+    relatedTemplate: { slug: "declaracao-de-residencia", label: "Gerar declaração de residência" },
     content: `A declaração de residência é um documento em que uma pessoa afirma, sob as penas da lei, que reside em determinado endereço. Ela é usada quando não se tem um comprovante de residência formal em seu nome.
 
 ## Quando usar uma declaração de residência
@@ -526,6 +541,7 @@ Com o Documind, gere declarações de residência com todos os dados e referênc
     readTime: "4 min",
     date: "15 de fevereiro de 2026",
     dateISO: "2026-02-15",
+    relatedTemplate: { slug: "contrato-de-emprestimo-entre-pessoas", label: "Gerar contrato de empréstimo" },
     content: `Emprestar dinheiro para amigos ou familiares é comum, mas sem um contrato formal, pode gerar conflitos e até perda do valor emprestado. Um contrato de empréstimo entre pessoas físicas (mútuo) dá segurança jurídica para ambas as partes.
 
 ## Por que fazer um contrato de empréstimo
@@ -743,21 +759,33 @@ export default async function BlogPostPage({
             })}
           </div>
 
-          {/* CTA */}
+          {/* CTA — links to specific template when available */}
           <div className="mt-12 p-6 rounded-2xl bg-gradient-to-r from-primary-50 to-primary-100 border border-primary-200">
             <h3 className="text-lg font-bold text-surface-900 mb-2">
-              Gere seu documento com o Documind
+              {post.relatedTemplate
+                ? `Gere seu ${post.relatedTemplate.label.replace("Gerar ", "")} com o Documind`
+                : "Gere seu documento com o Documind"}
             </h3>
             <p className="text-sm text-surface-600 mb-4">
               Crie contratos e documentos profissionais em segundos com nossa IA. Comece grátis!
             </p>
-            <Link
-              href="/registro"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 text-white font-semibold text-sm hover:bg-primary-700 transition-colors"
-            >
-              Criar conta grátis
-              <ArrowLeft className="w-4 h-4 rotate-180" />
-            </Link>
+            <div className="flex flex-wrap gap-3">
+              {post.relatedTemplate && (
+                <Link
+                  href={`/registro?redirect=/dashboard/gerar/${post.relatedTemplate.slug}`}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 text-white font-semibold text-sm hover:bg-primary-700 transition-colors"
+                >
+                  {post.relatedTemplate.label}
+                  <ArrowLeft className="w-4 h-4 rotate-180" />
+                </Link>
+              )}
+              <Link
+                href="/modelos"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white border border-surface-200 text-surface-700 font-semibold text-sm hover:bg-surface-50 transition-colors"
+              >
+                Ver todos os modelos
+              </Link>
+            </div>
           </div>
         </article>
 

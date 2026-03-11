@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { generateDocument } from "@/lib/ai";
 import { getTemplateBySlug } from "@/data/templates";
+import { PLANS } from "@/lib/constants";
 
 export async function POST(req: Request) {
   try {
@@ -23,7 +24,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Modelo não encontrado" }, { status: 404 });
     }
 
-    // Check usage limits for FREE users
+    // Read plan from DB directly (not session) for accurate limits
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       select: { plan: true, documentsUsed: true, documentsResetAt: true },
@@ -52,8 +53,10 @@ export async function POST(req: Request) {
       user.documentsUsed = 0;
     }
 
-    // Check limits for FREE plan
-    if (user.plan === "FREE" && user.documentsUsed >= 3) {
+    // Check limits using plan constants
+    const planConfig = PLANS[user.plan as keyof typeof PLANS];
+    const maxDocs = planConfig?.docsPerMonth ?? 3;
+    if (user.documentsUsed >= maxDocs) {
       return NextResponse.json(
         { error: "Limite de documentos atingido. Faça upgrade para o plano Pro para documentos ilimitados." },
         { status: 403 }

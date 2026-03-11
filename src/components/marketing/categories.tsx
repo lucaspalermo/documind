@@ -61,7 +61,7 @@ export function Categories() {
             return (
               <a
                 key={cat.slug}
-                href={`/modelos?categoria=${cat.slug}`}
+                href={`/modelos/categoria/${cat.slug}`}
                 className={`group relative p-6 rounded-2xl bg-white border ${colors.border} ${colors.hover} transition-all duration-300 hover:shadow-lg card-hover`}
               >
                 <div

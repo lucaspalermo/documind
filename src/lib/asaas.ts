@@ -1,19 +1,21 @@
-const ASAAS_BASE_URL = process.env.ASAAS_ENVIRONMENT === "production"
-  ? "https://api.asaas.com/v3"
-  : "https://sandbox.asaas.com/api/v3";
-
-const ASAAS_API_KEY = process.env.ASAAS_API_KEY;
+// Read env at request time to support key rotation and avoid stale closures
+function getBaseUrl() {
+  return process.env.NEXT_PUBLIC_ASAAS_ENVIRONMENT === "production"
+    ? "https://api.asaas.com/v3"
+    : "https://sandbox.asaas.com/api/v3";
+}
 
 async function asaasRequest(path: string, options: RequestInit = {}) {
-  if (!ASAAS_API_KEY) {
+  const apiKey = process.env.ASAAS_API_KEY;
+  if (!apiKey) {
     throw new Error("ASAAS_API_KEY is not configured");
   }
 
-  const res = await fetch(`${ASAAS_BASE_URL}${path}`, {
+  const res = await fetch(`${getBaseUrl()}${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
-      access_token: ASAAS_API_KEY,
+      access_token: apiKey,
       ...options.headers,
     },
   });
@@ -36,6 +38,10 @@ export async function createCustomer(data: {
     method: "POST",
     body: JSON.stringify(data),
   });
+}
+
+export async function findCustomerByEmail(email: string) {
+  return asaasRequest(`/customers?email=${encodeURIComponent(email)}`);
 }
 
 export async function createSubscription(data: {

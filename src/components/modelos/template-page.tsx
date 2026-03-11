@@ -105,7 +105,7 @@ export function TemplatePage({ template, relatedTemplates }: Props) {
 
             {/* CTA */}
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <Button variant="cta" size="lg" href="/registro">
+              <Button variant="cta" size="lg" href={`/registro?redirect=/dashboard/gerar/${template.slug}`}>
                 Personalizar este documento
                 <ArrowRight className="w-5 h-5" />
               </Button>
@@ -214,14 +214,14 @@ export function TemplatePage({ template, relatedTemplates }: Props) {
                   <p className="text-sm text-surface-500 mb-6">
                     Personalize este modelo com IA e baixe seu documento profissional em PDF.
                   </p>
-                  <Button variant="cta" size="lg" className="w-full mb-3" href="/registro">
+                  <Button variant="cta" size="lg" className="w-full mb-3" href={`/registro?redirect=/dashboard/gerar/${template.slug}`}>
                     Criar documento
                     <ArrowRight className="w-5 h-5" />
                   </Button>
                   <p className="text-xs text-surface-400 text-center">
                     {template.isPremium
                       ? "Requer plano PRO"
-                      : "3 documentos grátis por mês"}
+                      : "1 documento grátis por mês"}
                   </p>
                 </div>
 
@@ -255,28 +255,7 @@ export function TemplatePage({ template, relatedTemplates }: Props) {
         </div>
       </section>
 
-      {/* JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebPage",
-            name: template.title,
-            description: template.description,
-            ...(template.faq.length > 0 && {
-              mainEntity: template.faq.map((item) => ({
-                "@type": "Question",
-                name: item.question,
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: item.answer,
-                },
-              })),
-            }),
-          }),
-        }}
-      />
+      {/* JSON-LD is rendered by the parent page.tsx to avoid duplicates */}
     </>
   );
 }

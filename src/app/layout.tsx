@@ -48,11 +48,20 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: `${SITE_NAME} — Gere Contratos Profissionais com IA`,
     description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: `${SITE_URL}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: "Documind — Gere Contratos Profissionais com IA",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
+    images: [`${SITE_URL}/og-image.png`],
   },
   verification: {
     google: "XYQ1uKroP4VV2_zEInaOg5rdxh5IQy6HghHUJmSCuhY",
@@ -80,6 +89,14 @@ const jsonLd = {
       url: SITE_URL,
       description: SITE_DESCRIPTION,
       email: "contato@documind.com.br",
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/logo.png`,
+      },
+      sameAs: [
+        "https://www.instagram.com/documind.br",
+        "https://www.linkedin.com/company/documind",
+      ],
     },
     {
       "@type": "WebSite",

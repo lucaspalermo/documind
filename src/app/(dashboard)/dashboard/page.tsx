@@ -19,7 +19,7 @@ export default function DashboardPage() {
   const user = session?.user as any;
   const plan = user?.plan || "FREE";
   const documentsUsed = user?.documentsUsed || 0;
-  const maxDocs = plan === "FREE" ? 3 : Infinity;
+  const maxDocs = plan === "FREE" ? 1 : Infinity;
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -32,6 +32,28 @@ export default function DashboardPage() {
           Gerencie seus documentos e crie novos contratos com IA.
         </p>
       </div>
+
+      {/* Onboarding - First time users */}
+      {documentsUsed === 0 && plan === "FREE" && (
+        <div className="mb-8 p-6 rounded-2xl bg-gradient-to-br from-primary-600 to-primary-700 text-white">
+          <h2 className="text-xl font-bold mb-2">
+            Crie seu primeiro documento em 30 segundos
+          </h2>
+          <p className="text-primary-100 text-sm mb-4">
+            Escolha um modelo, preencha os dados e nossa IA gera um documento profissional personalizado. Simples assim.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <a href="/dashboard/gerar" className="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-primary-700 rounded-xl text-sm font-bold hover:bg-primary-50 transition-colors">
+              <FilePlus className="w-4 h-4" />
+              Gerar meu primeiro documento
+              <ArrowRight className="w-4 h-4" />
+            </a>
+            <a href="/modelos" className="inline-flex items-center gap-2 px-4 py-2.5 bg-white/10 text-white rounded-xl text-sm font-semibold hover:bg-white/20 transition-colors">
+              Ver modelos disponíveis
+            </a>
+          </div>
+        </div>
+      )}
 
       {/* Stats Cards */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

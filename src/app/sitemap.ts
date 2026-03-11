@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { ALL_TEMPLATES } from "@/data/templates";
+import { TEMPLATE_CATEGORIES } from "@/lib/constants";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -47,6 +48,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.3,
     },
+    {
+      url: `${baseUrl}/comparar/documind-vs-advogado`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/comparar/documind-vs-word`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/comparar/documind-vs-contratos-online`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
   ];
 
   const blogPosts = [
@@ -71,6 +90,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
+  const categoryPages: MetadataRoute.Sitemap = TEMPLATE_CATEGORIES.map((cat) => ({
+    url: `${baseUrl}/modelos/categoria/${cat.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.85,
+  }));
+
   const templatePages: MetadataRoute.Sitemap = ALL_TEMPLATES.map((template) => ({
     url: `${baseUrl}/modelos/${template.slug}`,
     lastModified: new Date(),
@@ -78,5 +104,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.85,
   }));
 
-  return [...staticPages, ...templatePages, ...blogPages];
+  return [...staticPages, ...categoryPages, ...templatePages, ...blogPages];
 }

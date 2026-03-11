@@ -1,11 +1,21 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { createCustomer, createSubscription, cancelSubscription, getSubscriptionPayments, getPaymentPixQrCode } from "@/lib/asaas";
+import { createCustomer, findCustomerByEmail, createSubscription, cancelSubscription, getSubscriptionPayments, getPaymentPixQrCode } from "@/lib/asaas";
 import { PLANS } from "@/lib/constants";
 
 const VALID_BILLING_TYPES = ["PIX", "CREDIT_CARD", "BOLETO"] as const;
 const VALID_PLAN_KEYS = ["PRO", "BUSINESS", "ENTERPRISE"] as const;
+
+async function waitForPayment(subscriptionId: string, maxRetries = 5): Promise<any | null> {
+  for (let i = 0; i < maxRetries; i++) {
+    const paymentsData = await getSubscriptionPayments(subscriptionId);
+    const firstPayment = paymentsData?.data?.[0];
+    if (firstPayment) return firstPayment;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+  return null;
+}
 
 export async function POST(req: Request) {
   try {
@@ -39,10 +49,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Usuário não encontrado" }, { status: 404 });
     }
 
-    // CPF is required for Asaas in production
+    // CPF/CNPJ is required for Asaas
     const userCpf = cpf || user.cpf;
     if (!userCpf) {
-      return NextResponse.json({ error: "CPF é obrigatório para pagamento" }, { status: 400 });
+      return NextResponse.json({ error: "CPF/CNPJ é obrigatório para pagamento" }, { status: 400 });
     }
 
     // Save CPF if not saved yet
@@ -53,25 +63,28 @@ export async function POST(req: Request) {
       });
     }
 
-    // Cancel existing subscription before creating new one
-    if (user.asaasSubscriptionId) {
-      try {
-        await cancelSubscription(user.asaasSubscriptionId);
-      } catch {
-        // May already be cancelled
-      }
-    }
-
-    // Create or get Asaas customer
+    // Create or recover Asaas customer (avoid duplicates)
     let customerId = user.asaasCustomerId;
 
     if (!customerId) {
-      const customer = await createCustomer({
-        name: user.name || "Usuário Documind",
-        email: user.email,
-        cpfCnpj: userCpf.replace(/\D/g, ""),
-      });
-      customerId = customer.id;
+      // Check if customer already exists in Asaas by email
+      try {
+        const existing = await findCustomerByEmail(user.email);
+        if (existing?.data?.[0]?.id) {
+          customerId = existing.data[0].id;
+        }
+      } catch {
+        // Ignore - will create new
+      }
+
+      if (!customerId) {
+        const customer = await createCustomer({
+          name: user.name || "Usuário Documind",
+          email: user.email,
+          cpfCnpj: userCpf.replace(/\D/g, ""),
+        });
+        customerId = customer.id;
+      }
 
       await prisma.user.update({
         where: { id: user.id },
@@ -79,32 +92,47 @@ export async function POST(req: Request) {
       });
     }
 
+    // Cancel existing subscription AFTER preparing the new one's data
+    // to minimize the window where the user has no subscription
+    const oldSubscriptionId = user.asaasSubscriptionId;
+
     // Create subscription
     const nextDueDate = new Date();
     nextDueDate.setDate(nextDueDate.getDate() + 1);
 
-    const subscription = await createSubscription({
-      customer: customerId!,
-      billingType: billingType as "PIX" | "CREDIT_CARD" | "BOLETO",
-      value: (plan as any).asaasValue,
-      cycle: "MONTHLY",
-      description: `Documind - Plano ${plan.name}`,
-      nextDueDate: nextDueDate.toISOString().split("T")[0],
-      externalReference: planKey,
-    });
+    let subscription;
+    try {
+      subscription = await createSubscription({
+        customer: customerId!,
+        billingType: billingType as "PIX" | "CREDIT_CARD" | "BOLETO",
+        value: (plan as any).asaasValue,
+        cycle: "MONTHLY",
+        description: `Documind - Plano ${plan.name}`,
+        nextDueDate: nextDueDate.toISOString().split("T")[0],
+        externalReference: planKey,
+      });
+    } catch (error) {
+      // If creation fails, DON'T cancel the old subscription
+      throw error;
+    }
 
-    // Save subscription ID
+    // New subscription created successfully - now cancel the old one
+    if (oldSubscriptionId) {
+      try {
+        await cancelSubscription(oldSubscriptionId);
+      } catch {
+        // Old subscription may already be cancelled - proceed
+      }
+    }
+
+    // Save new subscription ID
     await prisma.user.update({
       where: { id: user.id },
       data: { asaasSubscriptionId: subscription.id },
     });
 
-    // Fetch the first payment to get payment details
-    // Small delay to allow Asaas to create the payment
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    const paymentsData = await getSubscriptionPayments(subscription.id);
-    const firstPayment = paymentsData?.data?.[0];
+    // Poll for the first payment (retry up to 5x with 1s intervals)
+    const firstPayment = await waitForPayment(subscription.id);
 
     if (!firstPayment) {
       return NextResponse.json({
@@ -125,10 +153,10 @@ export async function POST(req: Request) {
           expirationDate: pixData.expirationDate,
         });
       } catch {
-        // Fallback to invoice URL
+        // Fallback: redirect to Asaas invoice page (has PIX option too)
         return NextResponse.json({
           subscriptionId: subscription.id,
-          paymentType: "PIX",
+          paymentType: "INVOICE",
           invoiceUrl: firstPayment.invoiceUrl,
         });
       }
@@ -143,7 +171,7 @@ export async function POST(req: Request) {
       });
     }
 
-    // CREDIT_CARD - redirect to Asaas hosted checkout
+    // CREDIT_CARD - redirect to Asaas hosted checkout (handles card collection)
     return NextResponse.json({
       subscriptionId: subscription.id,
       paymentType: "CREDIT_CARD",

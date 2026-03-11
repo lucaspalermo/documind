@@ -1,6 +1,7 @@
 "use client";
 
-import { Check, X, Sparkles, Zap, Building2, Crown } from "lucide-react";
+import { useState } from "react";
+import { Check, X, Sparkles, Zap, Building2, Crown, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PLANS } from "@/lib/constants";
@@ -36,7 +37,12 @@ const planConfig = [
   },
 ];
 
+// Annual discount: 25% off
+const ANNUAL_DISCOUNT = 0.25;
+
 export function Pricing() {
+  const [isAnnual, setIsAnnual] = useState(true);
+
   return (
     <section id="precos" className="py-24 relative overflow-hidden">
       <div className="absolute top-20 left-10 w-96 h-96 bg-primary-400/5 rounded-full blur-3xl" />
@@ -44,7 +50,7 @@ export function Pricing() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
+        <div className="text-center max-w-2xl mx-auto mb-10">
           <p className="text-sm font-semibold text-primary-600 tracking-wide uppercase mb-3">
             Preços
           </p>
@@ -57,11 +63,42 @@ export function Pricing() {
           </p>
         </div>
 
+        {/* Billing Toggle */}
+        <div className="flex items-center justify-center gap-3 mb-12">
+          <span className={`text-sm font-medium ${!isAnnual ? "text-surface-900" : "text-surface-400"}`}>
+            Mensal
+          </span>
+          <button
+            onClick={() => setIsAnnual(!isAnnual)}
+            className={`relative w-14 h-7 rounded-full transition-colors cursor-pointer ${
+              isAnnual ? "bg-primary-600" : "bg-surface-300"
+            }`}
+          >
+            <div
+              className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow-sm transition-transform ${
+                isAnnual ? "translate-x-7" : "translate-x-0.5"
+              }`}
+            />
+          </button>
+          <span className={`text-sm font-medium ${isAnnual ? "text-surface-900" : "text-surface-400"}`}>
+            Anual
+          </span>
+          {isAnnual && (
+            <Badge variant="cta" size="sm">
+              Economize 25%
+            </Badge>
+          )}
+        </div>
+
         {/* Plans Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {planConfig.map((config) => {
             const plan = PLANS[config.key];
             const isPro = config.highlight;
+            const monthlyPrice = plan.price;
+            const displayPrice = isAnnual && monthlyPrice > 0
+              ? monthlyPrice * (1 - ANNUAL_DISCOUNT)
+              : monthlyPrice;
 
             return (
               <div
@@ -96,7 +133,7 @@ export function Pricing() {
                 {/* Price */}
                 <div className="mb-6">
                   <div className="flex items-baseline gap-1">
-                    {plan.price === 0 ? (
+                    {displayPrice === 0 ? (
                       <span className="text-4xl font-extrabold text-surface-900 font-[family-name:var(--font-jakarta)]">
                         Grátis
                       </span>
@@ -104,13 +141,19 @@ export function Pricing() {
                       <>
                         <span className="text-sm text-surface-400">R$</span>
                         <span className="text-4xl font-extrabold text-surface-900 font-[family-name:var(--font-jakarta)]">
-                          {plan.price % 1 === 0 ? plan.price.toFixed(0) : plan.price.toFixed(2).replace(".", ",")}
+                          {displayPrice % 1 === 0 ? displayPrice.toFixed(0) : displayPrice.toFixed(2).replace(".", ",")}
                         </span>
                         <span className="text-surface-400 text-sm">/mês</span>
                       </>
                     )}
                   </div>
-                  {plan.price > 0 && (
+                  {monthlyPrice > 0 && isAnnual && (
+                    <p className="text-xs text-surface-400 mt-1">
+                      <span className="line-through">R$ {monthlyPrice.toFixed(2).replace(".", ",")}</span>
+                      {" "}· cobrado anualmente (R$ {(displayPrice * 12).toFixed(2).replace(".", ",")}/ ano)
+                    </p>
+                  )}
+                  {monthlyPrice > 0 && !isAnnual && (
                     <p className="text-xs text-surface-400 mt-1">
                       cobrado mensalmente via PIX ou cartão
                     </p>
@@ -122,7 +165,7 @@ export function Pricing() {
                   variant={config.ctaVariant}
                   size="md"
                   className="w-full mb-6"
-                  href={plan.price === 0 ? "/registro" : "/dashboard/assinatura"}
+                  href={monthlyPrice === 0 ? "/registro" : `/registro?plano=${config.key.toLowerCase()}`}
                 >
                   {config.cta}
                 </Button>
@@ -151,7 +194,13 @@ export function Pricing() {
 
         {/* Guarantee */}
         <div className="mt-12 text-center">
-          <p className="text-sm text-surface-400">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cta-50 border border-cta-200">
+            <Shield className="w-4 h-4 text-cta-600" />
+            <p className="text-sm font-medium text-cta-700">
+              Garantia de 7 dias — não gostou, devolvemos seu dinheiro. Sem perguntas.
+            </p>
+          </div>
+          <p className="text-xs text-surface-400 mt-3">
             Cancele quando quiser. Sem fidelidade. Sem taxa de cancelamento.
           </p>
         </div>

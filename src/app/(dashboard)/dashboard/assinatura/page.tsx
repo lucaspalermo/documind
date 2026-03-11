@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { Check, X, Sparkles, Zap, Building2, Crown, ArrowRight, CreditCard, QrCode, FileText, AlertTriangle, Copy, CheckCircle } from "lucide-react";
+import { Check, X, Sparkles, Zap, Building2, Crown, ArrowRight, CreditCard, QrCode, FileText, AlertTriangle, Copy, CheckCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PLANS } from "@/lib/constants";
@@ -16,12 +16,21 @@ const planIcons: Record<string, React.ElementType> = {
 
 const billingOptions = [
   { key: "PIX" as const, label: "PIX", icon: QrCode, description: "Aprovação instantânea" },
-  { key: "CREDIT_CARD" as const, label: "Cartão de Crédito", icon: CreditCard, description: "Recorrência automática" },
+  { key: "CREDIT_CARD" as const, label: "Cartão de Crédito", icon: CreditCard, description: "Checkout seguro Asaas" },
   { key: "BOLETO" as const, label: "Boleto", icon: FileText, description: "Vencimento em 3 dias" },
 ];
 
-function formatCPF(value: string) {
-  const digits = value.replace(/\D/g, "").slice(0, 11);
+function formatCpfCnpj(value: string) {
+  const digits = value.replace(/\D/g, "").slice(0, 14);
+  // CNPJ (14 digits)
+  if (digits.length > 11) {
+    return digits
+      .replace(/^(\d{2})(\d)/, "$1.$2")
+      .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+      .replace(/\.(\d{3})(\d)/, ".$1/$2")
+      .replace(/(\d{4})(\d)/, "$1-$2");
+  }
+  // CPF (11 digits)
   if (digits.length <= 3) return digits;
   if (digits.length <= 6) return `${digits.slice(0, 3)}.${digits.slice(3)}`;
   if (digits.length <= 9) return `${digits.slice(0, 3)}.${digits.slice(3, 6)}.${digits.slice(6)}`;
@@ -29,7 +38,7 @@ function formatCPF(value: string) {
 }
 
 export default function AssinaturaPage() {
-  const { data: session } = useSession();
+  const { data: session, update: updateSession } = useSession();
   const currentPlan = (session?.user as any)?.plan || "FREE";
   const [loading, setLoading] = useState<string | null>(null);
   const [cancelLoading, setCancelLoading] = useState(false);
@@ -37,6 +46,7 @@ export default function AssinaturaPage() {
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [cpf, setCpf] = useState("");
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   // PIX QR Code modal state
   const [pixData, setPixData] = useState<{ qrCode: string; copyPaste: string } | null>(null);
@@ -44,11 +54,12 @@ export default function AssinaturaPage() {
 
   async function handleUpgrade(planKey: string) {
     setError("");
+    setSuccessMessage("");
 
-    // Validate CPF
+    // Validate CPF/CNPJ
     const cpfDigits = cpf.replace(/\D/g, "");
-    if (cpfDigits.length !== 11) {
-      setError("Informe um CPF válido com 11 dígitos.");
+    if (cpfDigits.length !== 11 && cpfDigits.length !== 14) {
+      setError("Informe um CPF (11 dígitos) ou CNPJ (14 dígitos) válido.");
       return;
     }
 
@@ -75,8 +86,9 @@ export default function AssinaturaPage() {
         });
       } else if (data.invoiceUrl) {
         window.open(data.invoiceUrl, "_blank");
+        setSuccessMessage("Você será redirecionado para a página de pagamento. Após o pagamento, seu plano será atualizado automaticamente.");
       } else {
-        setError("Assinatura criada. Aguarde a geração do pagamento.");
+        setSuccessMessage("Assinatura criada! O pagamento será gerado em instantes. Atualize a página em alguns segundos.");
       }
     } catch {
       setError("Erro ao processar. Tente novamente.");
@@ -95,8 +107,10 @@ export default function AssinaturaPage() {
       const data = await res.json();
 
       if (res.ok) {
-        alert("Assinatura cancelada com sucesso. Seu plano volta ao Grátis.");
-        window.location.reload();
+        // Refresh session to reflect the downgrade
+        await updateSession();
+        setShowCancelConfirm(false);
+        setSuccessMessage("Assinatura cancelada com sucesso. Seu plano voltou ao Grátis.");
       } else {
         alert(data.error || "Erro ao cancelar. Entre em contato com o suporte.");
       }
@@ -104,7 +118,6 @@ export default function AssinaturaPage() {
       alert("Erro ao cancelar. Tente novamente.");
     } finally {
       setCancelLoading(false);
-      setShowCancelConfirm(false);
     }
   }
 
@@ -114,6 +127,13 @@ export default function AssinaturaPage() {
       setCopied(true);
       setTimeout(() => setCopied(false), 3000);
     }
+  }
+
+  async function closePixModal() {
+    setPixData(null);
+    // Refresh session to pick up any plan changes from webhook
+    await updateSession();
+    setSuccessMessage("Após a confirmação do pagamento (geralmente instantâneo via PIX), seu plano será atualizado automaticamente.");
   }
 
   return (
@@ -163,7 +183,7 @@ export default function AssinaturaPage() {
               variant="secondary"
               size="sm"
               className="w-full"
-              onClick={() => { setPixData(null); window.location.reload(); }}
+              onClick={closePixModal}
             >
               Fechar
             </Button>
@@ -220,9 +240,16 @@ export default function AssinaturaPage() {
                 <button
                   onClick={handleCancel}
                   disabled={cancelLoading}
-                  className="px-4 py-2 rounded-xl text-sm font-semibold text-red-600 border border-red-300 hover:bg-red-100 transition-colors cursor-pointer disabled:opacity-50"
+                  className="px-4 py-2 rounded-xl text-sm font-semibold text-red-600 border border-red-300 hover:bg-red-100 transition-colors cursor-pointer disabled:opacity-50 flex items-center gap-2"
                 >
-                  {cancelLoading ? "Cancelando..." : "Sim, cancelar"}
+                  {cancelLoading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Cancelando...
+                    </>
+                  ) : (
+                    "Sim, cancelar"
+                  )}
                 </button>
               </div>
             </div>
@@ -237,7 +264,14 @@ export default function AssinaturaPage() {
         </div>
       )}
 
-      {/* Payment Method & CPF */}
+      {/* Success */}
+      {successMessage && (
+        <div className="p-4 rounded-2xl bg-green-50 border border-green-200 text-sm text-green-700 mb-8">
+          {successMessage}
+        </div>
+      )}
+
+      {/* Payment Method & CPF/CNPJ */}
       <div className="mb-8">
         <h2 className="text-sm font-semibold text-surface-700 mb-3">Método de pagamento</h2>
         <div className="grid grid-cols-3 gap-3 mb-4">
@@ -266,14 +300,14 @@ export default function AssinaturaPage() {
 
         <div>
           <label className="block text-sm font-medium text-surface-700 mb-1.5">
-            CPF <span className="text-red-500">*</span>
+            CPF ou CNPJ <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             value={cpf}
-            onChange={(e) => setCpf(formatCPF(e.target.value))}
-            placeholder="000.000.000-00"
-            maxLength={14}
+            onChange={(e) => setCpf(formatCpfCnpj(e.target.value))}
+            placeholder="000.000.000-00 ou 00.000.000/0000-00"
+            maxLength={18}
             className="w-full max-w-xs px-4 py-3 rounded-xl border-2 border-surface-200 focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 outline-none text-surface-900 placeholder:text-surface-400 transition-all"
           />
           <p className="mt-1 text-xs text-surface-400">

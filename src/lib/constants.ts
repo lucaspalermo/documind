@@ -2,11 +2,11 @@ export const PLANS = {
   FREE: {
     name: "Grátis",
     price: 0,
-    docsPerMonth: 3,
+    docsPerMonth: 1,
     features: [
-      "3 documentos por mês",
+      "1 documento por mês",
       "Modelos básicos",
-      "Download em PDF",
+      "Download em PDF (com marca d'água)",
       "Personalização com IA",
     ],
     notIncluded: [

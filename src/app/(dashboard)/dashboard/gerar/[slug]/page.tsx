@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { getTemplateBySlug } from "@/data/templates";
 import {
   ArrowLeft,
@@ -11,14 +12,19 @@ import {
   Loader2,
   Check,
   FileText,
+  Sparkles,
+  Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function GerarDocumentoPage() {
   const params = useParams();
   const router = useRouter();
+  const { data: session } = useSession();
   const slug = params.slug as string;
   const template = getTemplateBySlug(slug);
+  const userPlan = (session?.user as any)?.plan || "FREE";
+  const documentsUsed = (session?.user as any)?.documentsUsed || 0;
 
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<Record<string, string>>({});
@@ -157,6 +163,31 @@ export default function GerarDocumentoPage() {
             {generatedContent}
           </div>
         </div>
+
+        {/* Upsell banner for FREE users */}
+        {userPlan === "FREE" && (
+          <div className="mt-6 p-5 rounded-2xl bg-gradient-to-r from-primary-50 to-cta-50 border border-primary-200">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-primary-100 flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-5 h-5 text-primary-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-surface-900">
+                    Você usou {documentsUsed + 1} de 1 documento grátis este mês
+                  </p>
+                  <p className="text-xs text-surface-500 mt-0.5">
+                    O PDF gratuito inclui marca d&apos;água. Faça upgrade para PDF profissional sem marca, documentos ilimitados e modelos premium.
+                  </p>
+                </div>
+              </div>
+              <Button variant="cta" size="sm" href="/dashboard/assinatura" className="flex-shrink-0">
+                <Zap className="w-4 h-4" />
+                Upgrade PRO — R$29,90/mês
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

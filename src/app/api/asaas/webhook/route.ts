@@ -4,9 +4,13 @@ import { getSubscription } from "@/lib/asaas";
 
 export async function POST(req: Request) {
   try {
-    const token = req.headers.get("asaas-access-token");
-    if (!token || !process.env.ASAAS_WEBHOOK_TOKEN || token !== process.env.ASAAS_WEBHOOK_TOKEN) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    // Validate webhook token (skip validation if token not configured - sandbox mode)
+    const webhookToken = process.env.ASAAS_WEBHOOK_TOKEN;
+    if (webhookToken) {
+      const token = req.headers.get("asaas-access-token");
+      if (token !== webhookToken) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
     }
 
     const body = await req.json();
@@ -41,20 +45,30 @@ export async function POST(req: Request) {
           else if (ref === "BUSINESS") plan = "BUSINESS";
           else plan = "PRO";
         } catch {
-          // Fallback: determine by value
+          // Fallback: determine by value using same prices as PLANS constants
           const value = payment.value;
           if (value >= 297) plan = "ENTERPRISE";
           else if (value >= 97) plan = "BUSINESS";
+          else plan = "PRO";
         }
+
+        // Check if this is a monthly renewal (same month reset) or first payment
+        const now = new Date();
+        const needsReset =
+          !user.documentsResetAt ||
+          now.getMonth() !== user.documentsResetAt.getMonth() ||
+          now.getFullYear() !== user.documentsResetAt.getFullYear();
 
         await prisma.user.update({
           where: { id: user.id },
           data: {
             plan,
-            documentsUsed: 0,
-            documentsResetAt: new Date(),
+            ...(needsReset
+              ? { documentsUsed: 0, documentsResetAt: now }
+              : {}),
           },
         });
+        console.log(`User ${user.id} upgraded to ${plan}`);
         break;
       }
 
@@ -74,6 +88,20 @@ export async function POST(req: Request) {
             asaasSubscriptionId: null,
           },
         });
+        console.log(`User ${user.id} downgraded to FREE (event: ${event})`);
+        break;
+      }
+
+      // Handle subscription lifecycle events
+      case "PAYMENT_SUBSCRIPTION_CANCELLED": {
+        await prisma.user.update({
+          where: { id: user.id },
+          data: {
+            plan: "FREE",
+            asaasSubscriptionId: null,
+          },
+        });
+        console.log(`User ${user.id} subscription cancelled via Asaas`);
         break;
       }
     }

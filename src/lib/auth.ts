@@ -56,23 +56,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   providers,
   callbacks: {
-    async jwt({ token, user, trigger }) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
       }
-      // Only fetch from DB on sign-in or explicit update (not on every request)
-      if (user || trigger === "update") {
-        if (token.id) {
-          const dbUser = await prisma.user.findUnique({
-            where: { id: token.id as string },
-            select: { plan: true, role: true, documentsUsed: true, documentsResetAt: true },
-          });
-          if (dbUser) {
-            token.plan = dbUser.plan;
-            token.role = dbUser.role;
-            token.documentsUsed = dbUser.documentsUsed;
-            token.documentsResetAt = dbUser.documentsResetAt;
-          }
+      // Always read plan/role from DB to ensure post-payment upgrades
+      // are reflected immediately without requiring re-login.
+      // This is a simple SELECT by PK - negligible performance impact.
+      if (token.id) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { plan: true, role: true, documentsUsed: true, documentsResetAt: true },
+        });
+        if (dbUser) {
+          token.plan = dbUser.plan;
+          token.role = dbUser.role;
+          token.documentsUsed = dbUser.documentsUsed;
+          token.documentsResetAt = dbUser.documentsResetAt;
         }
       }
       return token;

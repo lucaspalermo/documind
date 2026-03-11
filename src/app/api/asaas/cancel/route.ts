@@ -23,16 +23,21 @@ export async function POST() {
       return NextResponse.json({ error: "Você já está no plano Grátis" }, { status: 400 });
     }
 
-    // Cancel on Asaas if subscription exists
+    // Cancel on Asaas first - only downgrade locally if Asaas cancel succeeds
+    // (or if there's no subscription to cancel)
     if (user.asaasSubscriptionId) {
       try {
         await cancelSubscription(user.asaasSubscriptionId);
       } catch (error) {
-        console.warn("Failed to cancel subscription on Asaas:", error);
+        console.error("Failed to cancel subscription on Asaas:", error);
+        return NextResponse.json(
+          { error: "Erro ao cancelar no gateway de pagamento. Tente novamente ou entre em contato com o suporte." },
+          { status: 502 }
+        );
       }
     }
 
-    // Downgrade to FREE in database
+    // Asaas cancel succeeded (or no subscription) - now downgrade locally
     await prisma.user.update({
       where: { id: user.id },
       data: {
