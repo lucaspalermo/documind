@@ -3,35 +3,50 @@ import { prisma } from "@/lib/prisma";
 import { getSubscription } from "@/lib/asaas";
 
 export async function POST(req: Request) {
+  let body: any;
+
   try {
     // Validate webhook token
     const webhookToken = process.env.ASAAS_WEBHOOK_TOKEN;
     if (webhookToken) {
       const token = req.headers.get("asaas-access-token");
       if (token !== webhookToken) {
-        console.warn("Webhook auth failed. Expected token configured, got:", token ? "different token" : "no token");
+        console.warn("[WEBHOOK] Auth failed:", token ? "token mismatch" : "no token sent");
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
       }
     }
 
-    const body = await req.json();
-    console.log("Webhook received:", body.event, body.payment?.id || body.subscription?.id || "no id");
+    body = await req.json().catch(() => null);
+    if (!body || !body.event) {
+      console.warn("[WEBHOOK] Payload vazio ou sem event");
+      return NextResponse.json({ ok: true });
+    }
+
     const { event, payment, subscription: subscriptionData } = body;
+    console.log("[WEBHOOK] Evento:", event, "| Payment:", payment?.id ?? "-", "| Subscription:", payment?.subscription || subscriptionData?.id || "-");
 
     // Subscription ID can come from payment events or subscription events
     const subscriptionId = payment?.subscription || subscriptionData?.id;
 
     if (!subscriptionId) {
+      console.log("[WEBHOOK] Evento sem subscriptionId, ignorando:", event);
       return NextResponse.json({ ok: true });
     }
 
     // Find user by subscription
-    const user = await prisma.user.findFirst({
-      where: { asaasSubscriptionId: subscriptionId },
-    });
+    let user;
+    try {
+      user = await prisma.user.findFirst({
+        where: { asaasSubscriptionId: subscriptionId },
+      });
+    } catch (dbErr) {
+      console.error("[WEBHOOK] Erro ao buscar user no banco:", dbErr instanceof Error ? dbErr.message : dbErr);
+      // Retorna 200 para o Asaas não retentar — o problema é nosso, não do payload
+      return NextResponse.json({ ok: true, warning: "db_error" });
+    }
 
     if (!user) {
-      console.warn(`No user found for subscription: ${subscriptionId}`);
+      console.warn(`[WEBHOOK] Nenhum user para subscription: ${subscriptionId}`);
       return NextResponse.json({ ok: true });
     }
 
@@ -48,8 +63,8 @@ export async function POST(req: Request) {
           else if (ref === "BUSINESS") plan = "BUSINESS";
           else plan = "PRO";
         } catch {
-          // Fallback: determine by value using same prices as PLANS constants
-          const value = payment.value;
+          // Fallback: determine by value
+          const value = payment?.value ?? 0;
           if (value >= 297) plan = "ENTERPRISE";
           else if (value >= 97) plan = "BUSINESS";
           else plan = "PRO";
@@ -71,19 +86,17 @@ export async function POST(req: Request) {
               : {}),
           },
         });
-        console.log(`User ${user.id} upgraded to ${plan}`);
+        console.log(`[WEBHOOK] User ${user.id} upgraded to ${plan}`);
         break;
       }
 
       case "PAYMENT_OVERDUE": {
-        // Grace period: just log, don't downgrade immediately
-        console.warn(`Payment overdue for user ${user.id}, subscription ${subscriptionId}`);
+        console.warn(`[WEBHOOK] Payment overdue: user ${user.id}, sub ${subscriptionId}`);
         break;
       }
 
       case "PAYMENT_DELETED":
       case "PAYMENT_REFUNDED": {
-        // Downgrade to FREE but keep subscription ID for recovery
         await prisma.user.update({
           where: { id: user.id },
           data: {
@@ -91,11 +104,10 @@ export async function POST(req: Request) {
             asaasSubscriptionId: null,
           },
         });
-        console.log(`User ${user.id} downgraded to FREE (event: ${event})`);
+        console.log(`[WEBHOOK] User ${user.id} downgraded to FREE (${event})`);
         break;
       }
 
-      // Handle subscription lifecycle events
       case "PAYMENT_SUBSCRIPTION_CANCELLED":
       case "SUBSCRIPTION_DELETED":
       case "SUBSCRIPTION_INACTIVATED": {
@@ -106,18 +118,20 @@ export async function POST(req: Request) {
             asaasSubscriptionId: null,
           },
         });
-        console.log(`User ${user.id} subscription ended via Asaas (event: ${event})`);
+        console.log(`[WEBHOOK] User ${user.id} subscription ended (${event})`);
         break;
+      }
+
+      default: {
+        console.log(`[WEBHOOK] Evento não tratado: ${event}`);
       }
     }
 
     return NextResponse.json({ ok: true });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    console.error("Webhook error:", message);
-    return NextResponse.json(
-      { error: "Webhook processing error", detail: message },
-      { status: 500 }
-    );
+    console.error("[WEBHOOK] Erro inesperado:", message, "| Body:", JSON.stringify(body ?? {}).slice(0, 500));
+    // SEMPRE retorna 200 para evitar retentativas do Asaas que geram emails de erro
+    return NextResponse.json({ ok: true, warning: "internal_error" });
   }
 }
