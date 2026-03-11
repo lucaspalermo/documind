@@ -69,6 +69,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   const blogPosts = [
+    "contrato-estagio-lei-11788",
+    "home-office-contrato-trabalho-remoto",
+    "autorizacao-uso-imagem-modelo",
     "como-fazer-contrato-de-aluguel",
     "contrato-prestacao-servico-o-que-incluir",
     "procuracao-simples-como-fazer",

@@ -586,6 +586,261 @@ Se houver garantia (veículo, imóvel, cheque), descreva detalhadamente.
 
 O Documind gera contratos de empréstimo entre pessoas físicas com todas as cláusulas de proteção. Preencha os valores e prazos, e a IA monta o documento completo em minutos.`,
   },
+  {
+    slug: "contrato-estagio-lei-11788",
+    title: "Contrato de estágio: tudo que a Lei 11.788 exige",
+    metaDescription:
+      "Entenda as regras da Lei do Estágio (11.788/08): carga horária, bolsa-auxílio, direitos do estagiário e como fazer o contrato corretamente.",
+    category: "Trabalhista",
+    readTime: "6 min",
+    date: "10 de março de 2026",
+    dateISO: "2026-03-10",
+    relatedTemplate: { slug: "contrato-de-estagio", label: "Gerar contrato de estágio" },
+    content: `O estágio é uma etapa fundamental na formação profissional, mas muitas empresas ainda erram na hora de formalizar a contratação. A Lei 11.788/2008 (Lei do Estágio) define regras claras que, se descumpridas, podem gerar vínculo empregatício e multas para a empresa.
+
+## O que é estágio segundo a lei
+
+O estágio é um ato educativo supervisionado, desenvolvido no ambiente de trabalho, que visa à preparação produtiva do estudante. Ele NÃO é um emprego — é uma extensão da formação acadêmica.
+
+### Estágio obrigatório vs. não obrigatório
+
+- **Obrigatório**: exigido pela grade curricular do curso. Pode ou não ter bolsa-auxílio.
+- **Não obrigatório**: opcional, mas a empresa DEVE pagar bolsa-auxílio e vale-transporte.
+
+## Requisitos para contratar um estagiário
+
+### 1. O estagiário deve estar matriculado e frequentando
+
+O estudante precisa estar matriculado em instituição de ensino superior, técnico, médio ou EJA. Sem matrícula ativa, não há estágio válido.
+
+### 2. Termo de compromisso obrigatório
+
+O contrato de estágio (chamado Termo de Compromisso de Estágio — TCE) deve ser assinado por três partes: empresa, estagiário e instituição de ensino.
+
+### 3. Compatibilidade com o curso
+
+As atividades do estágio devem ter relação com a formação do estudante. Um estudante de Direito não pode estagiar como auxiliar de limpeza.
+
+### 4. Supervisor na empresa
+
+A empresa deve designar um funcionário com formação na área para supervisionar até 10 estagiários simultaneamente.
+
+## Regras de carga horária
+
+A lei é rígida quanto à jornada:
+
+- **Ensino superior e técnico**: máximo de 6 horas diárias e 30 horas semanais
+- **Ensino médio e EJA**: máximo de 4 horas diárias e 20 horas semanais
+- **Período de provas**: a jornada deve ser reduzida pela metade
+
+## Direitos do estagiário
+
+### Bolsa-auxílio
+Obrigatória para estágio não obrigatório. O valor é livre — não há piso definido por lei, mas deve ser compatível com o mercado.
+
+### Vale-transporte
+Obrigatório para estágio não obrigatório, nas mesmas regras da CLT.
+
+### Recesso remunerado
+O estagiário tem direito a 30 dias de recesso a cada 12 meses, remunerado quando houver bolsa. Em estágios menores, o recesso é proporcional.
+
+### Seguro contra acidentes pessoais
+A empresa deve contratar seguro obrigatório contra acidentes pessoais para o estagiário.
+
+## O que incluir no contrato de estágio
+
+### Dados das três partes
+Empresa (CNPJ, endereço), estagiário (CPF, matrícula) e instituição de ensino (dados e representante).
+
+### Atividades e área de atuação
+Descrição detalhada das atividades compatíveis com o curso do estagiário.
+
+### Jornada e horário
+Carga horária diária e semanal, respeitando os limites da lei.
+
+### Vigência
+Data de início e término. O estágio na mesma empresa pode durar no máximo 2 anos (exceto PCD).
+
+### Valor da bolsa e benefícios
+Valor mensal da bolsa-auxílio e vale-transporte.
+
+### Dados do seguro
+Número da apólice e cobertura do seguro contra acidentes pessoais.
+
+## Riscos de não fazer o contrato corretamente
+
+Se a empresa não cumprir os requisitos da Lei 11.788, o estágio pode ser descaracterizado e a Justiça do Trabalho pode reconhecer **vínculo empregatício**. Isso significa pagar todos os direitos da CLT retroativamente: 13º, férias, FGTS, INSS.
+
+## Gere seu contrato de estágio no Documind
+
+O Documind gera contratos de estágio completos, com todas as cláusulas exigidas pela Lei 11.788. Preencha os dados da empresa, do estagiário e da instituição de ensino, e a IA monta o TCE em minutos.`,
+  },
+  {
+    slug: "home-office-contrato-trabalho-remoto",
+    title: "Trabalho remoto: como fazer o contrato de home office",
+    metaDescription:
+      "Guia completo sobre contrato de trabalho remoto (home office): cláusulas obrigatórias, ajuda de custo, controle de jornada e o que a CLT exige.",
+    category: "Trabalhista",
+    readTime: "5 min",
+    date: "9 de março de 2026",
+    dateISO: "2026-03-09",
+    relatedTemplate: { slug: "acordo-de-trabalho-home-office", label: "Gerar acordo de home office" },
+    content: `O trabalho remoto (teletrabalho ou home office) ganhou enorme relevância nos últimos anos. Desde a Reforma Trabalhista de 2017 e as atualizações da Lei 14.442/2022, a CLT possui regras específicas para essa modalidade. Formalizar o acordo é essencial para evitar disputas trabalhistas.
+
+## O que diz a CLT sobre teletrabalho
+
+O artigo 75-B da CLT define teletrabalho como a prestação de serviços fora das dependências do empregador, de maneira preponderante ou híbrida, usando tecnologias de informação e comunicação.
+
+### O que mudou com a Lei 14.442/2022
+
+- O comparecimento eventual à empresa NÃO descaracteriza o teletrabalho
+- É permitido o modelo **híbrido** (parte presencial, parte remoto)
+- Estagiários e aprendizes podem fazer teletrabalho
+- Prioridade para empregados com deficiência e pais de crianças até 4 anos
+
+## Cláusulas obrigatórias do contrato
+
+### 1. Modalidade de trabalho
+
+Especifique se o trabalho é 100% remoto, híbrido (quantos dias presenciais) ou eventual. A CLT exige que essa informação conste no contrato.
+
+### 2. Responsabilidade por equipamentos
+
+Defina quem fornece computador, monitor, cadeira ergonômica, internet e energia. A empresa pode fornecer os equipamentos ou reembolsar o funcionário.
+
+### 3. Ajuda de custo ou reembolso
+
+Se o funcionário usar seus próprios equipamentos, a empresa deve prever reembolso ou ajuda de custo mensal. Esse valor NÃO tem natureza salarial (não incide INSS, FGTS ou IRPF).
+
+### 4. Controle de jornada
+
+A empresa pode escolher entre:
+- **Controle por ponto eletrônico**: funcionário registra entrada e saída
+- **Controle por tarefa**: sem jornada fixa, o funcionário é avaliado por entregas (nesse caso, não tem hora extra)
+
+### 5. Ergonomia e saúde
+
+A empresa deve orientar o funcionário sobre postura, iluminação e pausas. O funcionário deve assinar um termo de responsabilidade sobre o ambiente de trabalho.
+
+### 6. Proteção de dados
+
+Cláusulas sobre segurança da informação: uso de VPN, proibição de acesso em redes públicas, política de senhas e sigilo de informações corporativas.
+
+### 7. Comunicação e disponibilidade
+
+Defina os canais de comunicação (Slack, Teams, email), horários de disponibilidade e regras sobre resposta fora do expediente.
+
+### 8. Retorno ao presencial
+
+A CLT permite que a empresa convoque o retorno ao presencial com prazo mínimo de 15 dias. Essa possibilidade deve constar no contrato.
+
+## Dúvidas frequentes
+
+### O funcionário em home office tem direito a hora extra?
+
+Depende. Se há controle de jornada (ponto), sim. Se o contrato prevê "controle por tarefa" (art. 62, III da CLT), não há direito a hora extra.
+
+### A empresa pode exigir câmera ligada o dia todo?
+
+Não há consenso jurídico, mas a tendência é considerar isso invasão de privacidade. O ideal é limitar a câmera a reuniões.
+
+### Quem paga a internet e a luz?
+
+O contrato deve prever isso. A prática mais comum é a empresa pagar uma ajuda de custo fixa mensal.
+
+## Modelo de acordo no Documind
+
+Com o Documind, você gera um acordo de trabalho remoto completo, com todas as cláusulas exigidas pela CLT. Preencha os dados do funcionário e da empresa, escolha o modelo híbrido ou 100% remoto, e a IA monta o documento em minutos.`,
+  },
+  {
+    slug: "autorizacao-uso-imagem-modelo",
+    title: "Autorização de uso de imagem: modelo e quando é obrigatória",
+    metaDescription:
+      "Saiba quando a autorização de uso de imagem é obrigatória, como fazer o documento corretamente e quais os riscos de usar fotos sem permissão.",
+    category: "Pessoal",
+    readTime: "4 min",
+    date: "8 de março de 2026",
+    dateISO: "2026-03-08",
+    relatedTemplate: { slug: "autorizacao-de-uso-de-imagem", label: "Gerar autorização de uso de imagem" },
+    content: `A autorização de uso de imagem é um documento essencial para qualquer pessoa ou empresa que deseja usar fotos, vídeos ou gravações de outra pessoa. Sem ela, o uso da imagem é considerado ilegal e pode gerar processos por danos morais.
+
+## O que diz a lei sobre direito de imagem
+
+O direito de imagem é garantido pela Constituição Federal (art. 5º, X) e pelo Código Civil (art. 20). A imagem de uma pessoa não pode ser usada comercialmente sem sua autorização expressa, salvo em casos de interesse público.
+
+### Quando a autorização é obrigatória
+
+- Fotos e vídeos para redes sociais de empresas
+- Campanhas publicitárias e de marketing
+- Eventos corporativos filmados ou fotografados
+- Depoimentos e cases de clientes
+- Fotos de funcionários em materiais institucionais
+- Gravações para cursos e conteúdo online
+- Ensaios fotográficos profissionais
+
+### Quando NÃO precisa de autorização
+
+- Cobertura jornalística e informativa
+- Imagens em locais públicos onde a pessoa não é o foco
+- Interesse público (políticos, celebridades em atos públicos)
+- Fins acadêmicos e científicos (com anonimização)
+
+## O que incluir na autorização
+
+### 1. Dados do autorizante
+
+Nome completo, CPF, RG e endereço de quem está cedendo o direito de imagem. Se for menor de idade, os dados do responsável legal.
+
+### 2. Dados do autorizado
+
+Nome ou razão social, CPF/CNPJ de quem vai usar a imagem.
+
+### 3. Finalidade específica
+
+Descreva exatamente para que a imagem será usada: "publicação em redes sociais da empresa", "material publicitário impresso e digital", "vídeo institucional", etc. Quanto mais específico, melhor.
+
+### 4. Meios de divulgação
+
+Liste os canais onde a imagem poderá ser veiculada: Instagram, YouTube, site, materiais impressos, TV, etc.
+
+### 5. Prazo de uso
+
+Defina por quanto tempo a imagem poderá ser usada. Pode ser por tempo determinado (ex: 2 anos) ou indeterminado. A autorização por prazo indeterminado pode ser revogada a qualquer momento.
+
+### 6. Remuneração
+
+Declare se o uso da imagem é gratuito ou se há pagamento. Se gratuito, a cláusula de gratuidade deve ser expressa.
+
+### 7. Território
+
+Defina onde a imagem poderá ser usada: "território nacional", "mundial", "apenas no estado de São Paulo", etc.
+
+### 8. Direito de revogação
+
+O autorizante pode revogar a autorização a qualquer momento, mas isso não afeta os usos já realizados.
+
+## Riscos de usar imagem sem autorização
+
+### Processo por danos morais
+
+O valor da indenização varia, mas tribunais brasileiros já condenaram empresas a pagar de R$5.000 a R$50.000 por uso indevido de imagem.
+
+### Obrigação de retirar o conteúdo
+
+Além da indenização, a Justiça pode determinar a remoção imediata de todo material que contenha a imagem, gerando prejuízo operacional.
+
+### Dano à reputação da empresa
+
+Processos por uso indevido de imagem geram publicidade negativa e podem afetar a credibilidade da marca.
+
+## Dica para empresas
+
+Crie o hábito de coletar a autorização ANTES de qualquer sessão de fotos ou gravação. Mantenha um arquivo organizado com todas as autorizações assinadas.
+
+## Gere sua autorização no Documind
+
+Com o Documind, você cria autorizações de uso de imagem profissionais em minutos. Preencha os dados, defina a finalidade e o prazo, e a IA gera o documento completo pronto para assinatura.`,
+  },
 ];
 
 export function generateStaticParams() {

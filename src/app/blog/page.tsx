@@ -23,6 +23,33 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    slug: "contrato-estagio-lei-11788",
+    title: "Contrato de estágio: tudo que a Lei 11.788 exige",
+    excerpt:
+      "Entenda as regras da Lei do Estágio: carga horária, bolsa-auxílio, direitos do estagiário e como fazer o contrato corretamente.",
+    category: "Trabalhista",
+    readTime: "6 min",
+    date: "10 Mar 2026",
+  },
+  {
+    slug: "home-office-contrato-trabalho-remoto",
+    title: "Trabalho remoto: como fazer o contrato de home office",
+    excerpt:
+      "Guia completo sobre contrato de trabalho remoto: cláusulas obrigatórias, ajuda de custo, controle de jornada e o que a CLT exige.",
+    category: "Trabalhista",
+    readTime: "5 min",
+    date: "9 Mar 2026",
+  },
+  {
+    slug: "autorizacao-uso-imagem-modelo",
+    title: "Autorização de uso de imagem: modelo e quando é obrigatória",
+    excerpt:
+      "Saiba quando a autorização de uso de imagem é obrigatória, como fazer o documento e quais os riscos de usar fotos sem permissão.",
+    category: "Pessoal",
+    readTime: "4 min",
+    date: "8 Mar 2026",
+  },
+  {
     slug: "como-fazer-contrato-de-aluguel",
     title: "Como fazer um contrato de aluguel completo em 2026",
     excerpt:
