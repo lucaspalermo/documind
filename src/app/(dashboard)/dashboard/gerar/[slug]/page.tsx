@@ -14,6 +14,7 @@ import {
   FileText,
   Sparkles,
   Zap,
+  Lock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -132,6 +133,44 @@ export default function GerarDocumentoPage() {
     }
   }
 
+  // Limit reached — full upgrade screen
+  if (userPlan === "FREE" && documentsUsed >= 1 && !generatedContent && !generating) {
+    return (
+      <div className="max-w-lg mx-auto text-center py-12">
+        <div className="w-16 h-16 rounded-2xl bg-upgrade-50 flex items-center justify-center mx-auto mb-6">
+          <Lock className="w-8 h-8 text-upgrade-500" />
+        </div>
+        <h2 className="text-2xl font-extrabold text-surface-900 font-[family-name:var(--font-jakarta)] mb-3">
+          Você já usou seu documento grátis
+        </h2>
+        <p className="text-surface-500 mb-8 max-w-md mx-auto">
+          Seu documento de <strong>{template.shortTitle}</strong> está pronto para ser gerado.
+          Faça upgrade para o PRO e gere documentos ilimitados, sem marca d&apos;água.
+        </p>
+
+        <div className="bg-white rounded-2xl border border-surface-200 p-6 mb-6 text-left">
+          <p className="text-sm font-bold text-surface-900 mb-4">Com o plano PRO você recebe:</p>
+          <ul className="space-y-3">
+            {["Documentos ilimitados por mês", "PDF profissional sem marca d'água", "Todos os modelos premium", "Assinatura digital integrada", "Histórico completo de documentos"].map((item) => (
+              <li key={item} className="flex items-center gap-2.5">
+                <Check className="w-4 h-4 text-cta-500 flex-shrink-0" />
+                <span className="text-sm text-surface-600">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <Button variant="cta" size="lg" href="/dashboard/assinatura" className="w-full mb-3">
+          <Zap className="w-5 h-5" />
+          Upgrade PRO — R$39,90/mês
+        </Button>
+        <p className="text-xs text-surface-400">
+          Cancele quando quiser. Sem fidelidade. Garantia de 7 dias.
+        </p>
+      </div>
+    );
+  }
+
   // Generated content view
   if (generatedContent) {
     return (
@@ -164,27 +203,35 @@ export default function GerarDocumentoPage() {
           </div>
         </div>
 
-        {/* Upsell banner for FREE users */}
+        {/* Upsell banner for FREE users — shown after first document */}
         {userPlan === "FREE" && (
-          <div className="mt-6 p-5 rounded-2xl bg-gradient-to-r from-primary-50 to-cta-50 border border-primary-200">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary-100 flex items-center justify-center flex-shrink-0">
-                  <Sparkles className="w-5 h-5 text-primary-600" />
-                </div>
+          <div className="mt-6 rounded-2xl border-2 border-upgrade-200 overflow-hidden">
+            <div className="bg-gradient-to-r from-upgrade-500 to-upgrade-400 px-6 py-3">
+              <p className="text-sm font-bold text-white flex items-center gap-2">
+                <Sparkles className="w-4 h-4" />
+                Gostou do resultado? Imagine fazer isso ilimitadamente.
+              </p>
+            </div>
+            <div className="bg-upgrade-50/50 p-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                  <p className="text-sm font-bold text-surface-900">
-                    Você usou {documentsUsed + 1} de 1 documento grátis este mês
+                  <p className="text-sm text-surface-700 mb-2">
+                    No plano <strong>PRO</strong> você tem:
                   </p>
-                  <p className="text-xs text-surface-500 mt-0.5">
-                    O PDF gratuito inclui marca d&apos;água. Faça upgrade para PDF profissional sem marca, documentos ilimitados e modelos premium.
-                  </p>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1">
+                    {["Docs ilimitados", "Sem marca d'água", "Modelos premium", "Assinatura digital"].map((item) => (
+                      <span key={item} className="flex items-center gap-1.5 text-xs text-surface-600">
+                        <Check className="w-3.5 h-3.5 text-cta-500" />
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
+                <Button variant="upgrade" size="md" href="/dashboard/assinatura" className="flex-shrink-0">
+                  <Zap className="w-4 h-4" />
+                  Upgrade — R$39,90/mês
+                </Button>
               </div>
-              <Button variant="cta" size="sm" href="/dashboard/assinatura" className="flex-shrink-0">
-                <Zap className="w-4 h-4" />
-                Upgrade PRO — R$29,90/mês
-              </Button>
             </div>
           </div>
         )}

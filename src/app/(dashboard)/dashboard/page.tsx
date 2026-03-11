@@ -144,23 +144,57 @@ export default function DashboardPage() {
         </a>
       </div>
 
-      {/* Upgrade banner (FREE users only) */}
+      {/* Usage + Upgrade banner (FREE users only) */}
       {plan === "FREE" && (
-        <div className="p-6 rounded-2xl bg-gradient-to-r from-upgrade-50 to-upgrade-100 border border-upgrade-200">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <h3 className="text-lg font-bold text-surface-900 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-upgrade-500" />
-                Faça upgrade para o PRO
-              </h3>
-              <p className="mt-1 text-sm text-surface-600">
-                Documentos ilimitados, modelos premium e assinatura digital por apenas R$39,90/mês.
+        <div className="rounded-2xl border border-surface-200 overflow-hidden">
+          {/* Usage progress */}
+          <div className="p-5 bg-white">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm font-semibold text-surface-900">
+                Uso do plano gratuito
               </p>
+              <span className="text-xs font-medium text-surface-400">
+                {documentsUsed} de 1 documento
+              </span>
             </div>
-            <Button variant="upgrade" size="md" href="/dashboard/assinatura">
-              Fazer upgrade
-              <ArrowRight className="w-4 h-4" />
-            </Button>
+            <div className="w-full h-2.5 bg-surface-100 rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all duration-500 ${
+                  documentsUsed >= 1 ? "bg-danger-500" : "bg-primary-500"
+                }`}
+                style={{ width: `${Math.min(100, (documentsUsed / 1) * 100)}%` }}
+              />
+            </div>
+            {documentsUsed >= 1 && (
+              <p className="text-xs text-danger-500 font-medium mt-2">
+                Limite atingido — faça upgrade para continuar gerando documentos
+              </p>
+            )}
+          </div>
+
+          {/* Upgrade CTA */}
+          <div className="p-5 bg-gradient-to-r from-upgrade-50 to-upgrade-100 border-t border-upgrade-200">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-base font-bold text-surface-900 flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-upgrade-500" />
+                  {documentsUsed >= 1
+                    ? "Continue gerando com o PRO"
+                    : "Faça upgrade para o PRO"
+                  }
+                </h3>
+                <p className="mt-1 text-sm text-surface-600">
+                  {documentsUsed >= 1
+                    ? "Documentos ilimitados, sem marca d'água e modelos premium."
+                    : "Documentos ilimitados, modelos premium e assinatura digital por R$39,90/mês."
+                  }
+                </p>
+              </div>
+              <Button variant="upgrade" size="md" href="/dashboard/assinatura" className="flex-shrink-0">
+                Upgrade PRO
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         </div>
       )}
