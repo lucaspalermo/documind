@@ -227,7 +227,7 @@ export default function AssinaturaPage() {
             <div className="flex-1">
               <h3 className="text-sm font-bold text-red-800">Tem certeza que deseja cancelar?</h3>
               <p className="text-sm text-red-600 mt-1">
-                Ao cancelar, seu plano voltará ao Grátis (3 documentos/mês). Documentos já gerados serão mantidos.
+                Ao cancelar, seu plano voltará ao Grátis (1 documento/mês com marca d&apos;água). Documentos já gerados serão mantidos.
               </p>
               <div className="flex gap-3 mt-4">
                 <Button

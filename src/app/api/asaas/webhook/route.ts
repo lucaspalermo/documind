@@ -4,16 +4,18 @@ import { getSubscription } from "@/lib/asaas";
 
 export async function POST(req: Request) {
   try {
-    // Validate webhook token (skip validation if token not configured - sandbox mode)
+    // Validate webhook token
     const webhookToken = process.env.ASAAS_WEBHOOK_TOKEN;
     if (webhookToken) {
       const token = req.headers.get("asaas-access-token");
       if (token !== webhookToken) {
+        console.warn("Webhook auth failed. Expected token configured, got:", token ? "different token" : "no token");
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
       }
     }
 
     const body = await req.json();
+    console.log("Webhook received:", body.event, body.payment?.id || "no payment");
     const { event, payment } = body;
 
     if (!payment?.subscription) {
