@@ -15,14 +15,15 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    console.log("Webhook received:", body.event, body.payment?.id || "no payment");
-    const { event, payment } = body;
+    console.log("Webhook received:", body.event, body.payment?.id || body.subscription?.id || "no id");
+    const { event, payment, subscription: subscriptionData } = body;
 
-    if (!payment?.subscription) {
+    // Subscription ID can come from payment events or subscription events
+    const subscriptionId = payment?.subscription || subscriptionData?.id;
+
+    if (!subscriptionId) {
       return NextResponse.json({ ok: true });
     }
-
-    const subscriptionId = payment.subscription;
 
     // Find user by subscription
     const user = await prisma.user.findFirst({
@@ -95,7 +96,9 @@ export async function POST(req: Request) {
       }
 
       // Handle subscription lifecycle events
-      case "PAYMENT_SUBSCRIPTION_CANCELLED": {
+      case "PAYMENT_SUBSCRIPTION_CANCELLED":
+      case "SUBSCRIPTION_DELETED":
+      case "SUBSCRIPTION_INACTIVATED": {
         await prisma.user.update({
           where: { id: user.id },
           data: {
@@ -103,7 +106,7 @@ export async function POST(req: Request) {
             asaasSubscriptionId: null,
           },
         });
-        console.log(`User ${user.id} subscription cancelled via Asaas`);
+        console.log(`User ${user.id} subscription ended via Asaas (event: ${event})`);
         break;
       }
     }
