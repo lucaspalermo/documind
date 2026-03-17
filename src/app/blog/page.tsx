@@ -23,6 +23,114 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    slug: "contrato-de-locacao-comercial-pontos-criticos",
+    title: "Contrato de locação comercial: 10 pontos críticos que você precisa saber",
+    excerpt:
+      "Conheça os 10 pontos mais importantes de um contrato de locação comercial, incluindo ação renovatória, luvas e garantias.",
+    category: "Imobiliário",
+    readTime: "7 min",
+    date: "16 Mar 2026",
+  },
+  {
+    slug: "notificacao-extrajudicial-modelo",
+    title: "Notificação extrajudicial: modelo, quando usar e como enviar",
+    excerpt:
+      "Saiba o que é notificação extrajudicial, quando usar, como redigir e enviar pelo cartório ou correio com AR.",
+    category: "Pessoal",
+    readTime: "5 min",
+    date: "15 Mar 2026",
+  },
+  {
+    slug: "como-fazer-procuracao-online",
+    title: "Como fazer procuração online: guia completo e passo a passo",
+    excerpt:
+      "Aprenda a fazer procuração online de forma rápida e segura, com validação digital e sem sair de casa.",
+    category: "Pessoal",
+    readTime: "4 min",
+    date: "14 Mar 2026",
+  },
+  {
+    slug: "modelo-de-contrato-de-servico-pj",
+    title: "Contrato de prestação de serviço PJ: modelo e cláusulas essenciais",
+    excerpt:
+      "Modelo completo de contrato PJ com todas as cláusulas essenciais para evitar vínculo empregatício e proteger ambas as partes.",
+    category: "Comercial",
+    readTime: "5 min",
+    date: "13 Mar 2026",
+  },
+  {
+    slug: "contrato-de-comodato-modelo",
+    title: "Contrato de comodato: o que é, modelo e como fazer em 2026",
+    excerpt:
+      "Entenda o que é contrato de comodato, como funciona o empréstimo gratuito de imóvel e como fazer o documento corretamente.",
+    category: "Imobiliário",
+    readTime: "6 min",
+    date: "12 Mar 2026",
+  },
+  {
+    slug: "rescisao-contrato-trabalho-direitos",
+    title: "Rescisão de contrato de trabalho: direitos, cálculos e prazos",
+    excerpt:
+      "Guia completo sobre rescisão trabalhista: tipos, cálculos de verbas rescisórias, prazos e direitos do trabalhador.",
+    category: "Trabalhista",
+    readTime: "6 min",
+    date: "11 Mar 2026",
+  },
+  {
+    slug: "contrato-social-simples-mei-me",
+    title: "Contrato social simples: como fazer para MEI, ME e EPP",
+    excerpt:
+      "Saiba como elaborar o contrato social da sua empresa, com cláusulas essenciais para MEI, ME e EPP.",
+    category: "Comercial",
+    readTime: "6 min",
+    date: "10 Mar 2026",
+  },
+  {
+    slug: "termo-de-entrega-de-chaves-imovel",
+    title: "Termo de entrega de chaves de imóvel: modelo e como fazer",
+    excerpt:
+      "Modelo de termo de entrega de chaves com checklist de vistoria para proteger locador e inquilino na devolução do imóvel.",
+    category: "Imobiliário",
+    readTime: "4 min",
+    date: "9 Mar 2026",
+  },
+  {
+    slug: "acordo-de-pensao-alimenticia-modelo",
+    title: "Acordo de pensão alimentícia: modelo, como fazer e homologar",
+    excerpt:
+      "Aprenda a fazer um acordo de pensão alimentícia extrajudicial, calcular o valor e homologar em juízo.",
+    category: "Pessoal",
+    readTime: "5 min",
+    date: "8 Mar 2026",
+  },
+  {
+    slug: "contrato-de-parceria-comercial-sociedade",
+    title: "Contrato de parceria comercial: como firmar uma sociedade segura",
+    excerpt:
+      "Descubra como fazer um contrato de parceria comercial seguro, com divisão de lucros, responsabilidades e cláusula de saída.",
+    category: "Comercial",
+    readTime: "5 min",
+    date: "7 Mar 2026",
+  },
+  {
+    slug: "vistoria-de-imovel-checklist-completo",
+    title: "Vistoria de imóvel: checklist completo para entrada e saída",
+    excerpt:
+      "Checklist completo para vistoria de imóvel na entrada e saída: paredes, hidráulica, elétrica, pisos e muito mais.",
+    category: "Imobiliário",
+    readTime: "5 min",
+    date: "6 Mar 2026",
+  },
+  {
+    slug: "orcamento-profissional-como-fazer",
+    title: "Orçamento profissional: como fazer e conquistar mais clientes",
+    excerpt:
+      "Aprenda a criar orçamentos profissionais que impressionam clientes: estrutura, validade, condições de pagamento e dicas de apresentação.",
+    category: "Comercial",
+    readTime: "4 min",
+    date: "5 Mar 2026",
+  },
+  {
     slug: "contrato-estagio-lei-11788",
     title: "Contrato de estágio: tudo que a Lei 11.788 exige",
     excerpt:

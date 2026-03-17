@@ -84,6 +84,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "contrato-trabalho-clt",
     "declaracao-de-residencia-modelo",
     "contrato-emprestimo-entre-pessoas",
+    "contrato-de-comodato-modelo",
+    "modelo-de-contrato-de-servico-pj",
+    "como-fazer-procuracao-online",
+    "notificacao-extrajudicial-modelo",
+    "contrato-de-locacao-comercial-pontos-criticos",
+    "rescisao-contrato-trabalho-direitos",
+    "contrato-social-simples-mei-me",
+    "termo-de-entrega-de-chaves-imovel",
+    "acordo-de-pensao-alimenticia-modelo",
+    "contrato-de-parceria-comercial-sociedade",
+    "vistoria-de-imovel-checklist-completo",
+    "orcamento-profissional-como-fazer",
   ];
 
   const blogPages: MetadataRoute.Sitemap = blogPosts.map((slug) => ({
