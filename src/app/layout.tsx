@@ -3,6 +3,7 @@ import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/utils";
 import { Providers } from "@/components/providers";
+import { Analytics } from "@/components/analytics";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -41,6 +42,10 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Documind" }],
   creator: "Documind",
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   openGraph: {
     type: "website",
     locale: "pt_BR",
@@ -48,20 +53,11 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: `${SITE_NAME} — Gere Contratos Profissionais com IA`,
     description: SITE_DESCRIPTION,
-    images: [
-      {
-        url: `${SITE_URL}/og-image.png`,
-        width: 1200,
-        height: 630,
-        alt: "Documind — Gere Contratos Profissionais com IA",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: [`${SITE_URL}/og-image.png`],
   },
   verification: {
     google: "XYQ1uKroP4VV2_zEInaOg5rdxh5IQy6HghHUJmSCuhY",
@@ -144,6 +140,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${inter.variable} ${jakarta.variable} font-sans antialiased`}>
+        <Analytics />
         <Providers>{children}</Providers>
       </body>
     </html>
