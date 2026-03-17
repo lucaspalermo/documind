@@ -75,6 +75,11 @@ export function Footer() {
               <li><Link href="/sobre" className="text-sm hover:text-white transition-colors">Sobre Nós</Link></li>
               <li><a href="mailto:contato@documind.com.br" className="text-sm hover:text-white transition-colors">Contato</a></li>
             </ul>
+
+            <h4 className="text-sm font-semibold text-white mb-4 mt-6">Parceiros</h4>
+            <ul className="space-y-2.5">
+              <li><a href="https://defesapix.com.br" target="_blank" rel="noopener noreferrer" className="text-sm text-primary-400 hover:text-primary-300 transition-colors">DefesaPix — Recupere seu PIX →</a></li>
+            </ul>
           </div>
         </div>
 
